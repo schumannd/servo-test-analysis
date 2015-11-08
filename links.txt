@@ -1,1 +1,8 @@
+Priorities after 1.0:
+https://internals.rust-lang.org/t/priorities-after-1-0/1901
+
+Developing Servo (experience report):
 http://arxiv.org/pdf/1505.07383v1.pdf
+
+speed:
+http://thenewstack.io/mozillas-servo-lets-rust-shine/
