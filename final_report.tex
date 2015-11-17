@@ -100,6 +100,17 @@ V \& V will never be complete. Even after the release there will always be bigfi
 
 \subsection*{Most important automation possibilities: Test case execution \& management, Coverage measurement}
 
+\section{Notes}
+
+\subsection*{Trying to get any kinf of test coverage}
+- GNU tool gcov does not work with rust
+
+- kcov is the only working option right now. Does not work on OS X or Linux/arm.
+
+- We have to run everything on a VM now which slows things down a lot.
+
+- Making gcov work was moved to RFC in January 2015.
+
 
 \end{document}
 
