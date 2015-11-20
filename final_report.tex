@@ -120,6 +120,18 @@ V \& V will never be complete. Even after the release there will always be bigfi
 
 - First coverage created by just starting the servo binary with kcov (and necessary --verify flag)\\
 
+Helper Script:
+
+\lstset{language=Python}  
+\begin{lstlisting}
+
+#!/bin/sh
+
+kcov --verify --exclude-pattern=/.cargo,../src /home/johannes/servo/cov 
+ /home/johannes/servo/servo-sync/target/debug/servo_orig "$@"\\
+
+\end{lstlisting}
+
 Open problems:
 
 - Unit tests and integration tests work differently (unit tests use test binaries, wpt tests use servo binary)
