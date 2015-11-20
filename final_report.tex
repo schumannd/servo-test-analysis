@@ -143,5 +143,11 @@ Open problems:
 - Getting coverage for 1 test takes about 30 seconds. (WPT contains 3615 tests, whole suite over 6600) => Full coverage report would take 22 days to generate
 
 
+\subsection*{Johannes 20.11.2015}
+ - There were plans to implement the Go style coverage gathering into Rust \url{https://mail.mozilla.org/pipermail/rust-dev/2014-October/011281.html}. I sent that guy an email.
+
+ - IRC people pointed me to \url{https://github.com/frewsxcv/afl.rs}. Fuzzy testing, measures coverage on llvm level. No means to see results at source code level yet. It tracks transitions between "`sites"' (blocks in rust) with bitmaps, $(current_site_id XOR previous_site_id) \% bitmap_size$.
+
+ - there is \url{https://github.com/mrash/afl-cov}, but that needs gcov. no idea how easy porting that to kcov would be.
 \end{document}
 
