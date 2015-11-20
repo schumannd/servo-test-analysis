@@ -102,7 +102,7 @@ V \& V will never be complete. Even after the release there will always be bigfi
 
 \section{Notes}
 
-\subsection*{Trying to get any kinf of test coverage}
+\subsection*{Trying to get any kind of test coverage}
 - GNU tool gcov does not work with rust
 
 - kcov is the only working option right now. Does not work on OS X or Linux/arm.
@@ -110,6 +110,25 @@ V \& V will never be complete. Even after the release there will always be bigfi
 - We have to run everything on a VM now which slows things down a lot.
 
 - Making gcov work was moved to RFC in January 2015.
+
+\subsection*{Meeting 20.11.2015}
+- Status quo: kcov does not work with any servo binaries
+
+- apt-get install kcov yields old binary. We need to install from master.
+
+- kcov still errors. We try a random hint for ubuntu jessie to install it with libbfd-dev
+
+- First coverage created by just starting the servo binary with kcov (and necessary --verify flag)\\
+
+Open problems:
+
+- Unit tests and integration tests work differently (unit tests use test binaries, wpt tests use servo binary)
+
+- Execution of Several tests in a row does not accumulate the coverages (as it should according to kcov docs)
+
+- Tests don't generate deterministic coverages (e.g. statements covered by 1 test range: 26976 to 27104)
+
+- Getting coverage for 1 test takes about 30 seconds. (WPT contains 3615 tests, whole suite over 6600) => Full coverage report would take 22 days to generate
 
 
 \end{document}
