@@ -100,54 +100,6 @@ V \& V will never be complete. Even after the release there will always be bigfi
 
 \subsection*{Most important automation possibilities: Test case execution \& management, Coverage measurement}
 
-\section{Notes}
 
-\subsection*{Trying to get any kind of test coverage}
-- GNU tool gcov does not work with rust
-
-- kcov is the only working option right now. Does not work on OS X or Linux/arm.
-
-- We have to run everything on a VM now which slows things down a lot.
-
-- Making gcov work was moved to RFC in January 2015.
-
-\subsection*{Meeting 20.11.2015}
-- Status quo: kcov does not work with any servo binaries
-
-- apt-get install kcov yields old binary. We need to install from master.
-
-- kcov still errors. We try a random hint for debian jessie to install it with libbfd-dev
-
-- First coverage created by just starting the servo binary with kcov (and necessary --verify flag)\\
-
-- To do this we moved the servo binary to servo\_orig and placed our own helper script in its place:
-
-\lstset{language=Python}  
-\begin{lstlisting}
-
-#!/bin/sh
-
-kcov --verify --exclude-pattern=/.cargo,../src /home/johannes/servo/cov 
- /home/johannes/servo/servo-sync/target/debug/servo_orig "$@"\\
-
-\end{lstlisting}
-
-Open problems:
-
-- Unit tests and integration tests work differently (unit tests use test binaries, wpt tests use servo binary)
-
-- Execution of Several tests in a row does not accumulate the coverages (as it should according to kcov docs)
-
-- Tests don't generate deterministic coverages (e.g. statements covered by 1 test range: 26976 to 27104)
-
-- Getting coverage for 1 test takes about 30 seconds. (WPT contains 3615 tests, whole suite over 6600) => Full coverage report would take 22 days to generate
-
-
-\subsection*{Johannes 20.11.2015}
- - There were plans to implement the Go style coverage gathering into Rust \url{https://mail.mozilla.org/pipermail/rust-dev/2014-October/011281.html}. I sent that guy an email.
-
- - IRC people pointed me to \url{https://github.com/frewsxcv/afl.rs}. Fuzzy testing, measures coverage on llvm level. No means to see results at source code level yet. It tracks transitions between "`sites"' (blocks in rust) with bitmaps, $(current_site_id XOR previous_site_id) \% bitmap_size$.
-
- - there is \url{https://github.com/mrash/afl-cov}, but that needs gcov. no idea how easy porting that to kcov would be.
 \end{document}
 
