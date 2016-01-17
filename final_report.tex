@@ -11,6 +11,9 @@
 \geometry{top=24mm,textheight=245mm,textwidth=160mm,heightrounded,right=27mm,head=14.5pt}
 
 
+\newcommand{\todo}[1] {{\color{red}(TODO: #1)}}
+
+
 %\renewcommand{\labelenumi}{\alph{enumi})}
 \setlength{\parindent}{0mm}
 
@@ -90,29 +93,139 @@ V \& V will never be complete. Even after the release there will always be bigfi
 
 \subsection{Develop \& document initial test plan based on your findings}
 
+
+
 \section{Test automation}
 
-\subsection*{Find, experiment and evaluate test tools appropriate for your application}
+\subsection{description}
+\todo {
 
-\subsection*{Important parameters: development language, field of application}
+Find, experiment and evaluate test tools appropriate for your application
 
-\subsection*{Good overview of open source testing tools: http://www.opensourcetesting.org/}
+Most important automation possibilities: Test case execution \& management, Coverage measurement
+}
 
-\subsection*{Most important automation possibilities: Test case execution \& management, Coverage measurement}
+\subsection{cargo test}
+
+Rust's package manager cargo already has tools for running tests. Testing is as easy as annotating any method with \texttt{\#[test]}, and then running \texttt{cargo test}. Cargo will then build a testing binary, run all annotated methods and print out a report that looks like this:
+
+
+\begin{verbatim}
+    Compiling gfx_tests v0.0.1 (file:///home/johannes/servo/components/servo)
+    Running /home/johannes/servo/target/debug/deps/gfx_tests-9666be7e60be2090
+
+running 6 tests
+test text_util::test_transform_compress_none ... ok
+test text_util::test_transform_compress_whitespace ... ok
+test text_util::test_transform_compress_whitespace_newline_no_incoming ... ok
+test text_util::test_transform_compress_whitespace_newline ... ok
+test text_util::test_transform_discard_newline ... ok
+test font_cache_thread::test_local_web_font ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured
+
+\end{verbatim}
+
+Any crashes inside the tests (e.g. by failing assertions) are interpreted as test failures, methods that exit normally are successes.
+
+Cargo's builtin testing features are not meant for large-scale applications and test suites. There are some smaller libraries like stainless \footnote{\url{https://github.com/reem/stainless}} that are extending on cargo's features for example by adding setup and teardown methods, but such libraries haven't seen much use yet. 
+
+Servo uses \texttt{cargo test} for running the unit tests. For running the more complex test suites, it builds the binaries with cargo but uses python scripts to execute the individual tests.
+
+
+\subsection{Coverage tools}
+\todo{}
+
+\subsection{afl.rs?}
+\todo{}
+
 
 
 \section{ASA}
 
-\subsection*{Search for tools performing ASA}
+\subsection{ASA features of the Rust language}
 
-(Metrics, Tables and Diagrams, Programming Style, Code Smells, Bug patterns, Faults) for the software artefacts involved in your project \\
-– Check IDE, test execution framework, compiler options, … for ASA support \\
-– In case no or few tools are available: which kind of ASA techniques would be desirable? How costly would their implementation be? Possibly implement some ASA technique suitable for your project \\
+Rust has an extensive set of static analysis techniques built-in. They became necessary to achieve the first design goals of the language, safety, while not impeding the second and third, speed and concurrency.
 
+What follows is a list of classes of errors that are prevented by the Rust compiler. Most of them are allowed in other languages and become sources of programming errors. Finding such errors through static analysis is not always possible in other languages since they are not expressive enough and the programmer can't provide enough information in the code for an ASA tool to perform such an analysis.
+
+\paragraph{Ownership.} In Rust, variables and objects are always "`owned"' by a scope (usually, a block of code delimited by curly braces) or another object. This ownership can be moved, for example by calling a method and handing over the object as a parameter, but the language provides no way to copy the ownership to an object. This way, the owner of an object can be statically determined, and, more importantly, each object can be deleted if its owning object is deleted or the owning scope ends. This way, it can be determined at compile-time when each object has to be deleted, completely eliminating use-after-free bugs, a common source for crashes and security vulnerabilities, and preventing most classes of memory leaks.
+
+\paragraph{Borrowing.} To allow for more flexible movement of data, objects can be temporarily borrowed into other scopes. The compiler statically ensures that there exists either exactly one mutable borrow, through which the object can be mutated, or any number of immutable borrows. By preventing shared mutable state, a lot of programming errors are made impossible, for example data races. A data race occurs if two threads access the same data in an unsynchronized fashion and at least one of them writes. Since there can be only one thread writing at one specific data point at the same time, data races cannot happen. Iterator invalidation is another problem detected at compile time: Since iterating over a container mutably borrows the container, modifying the container, which would need to happen through a second mutable borrow, is not possible.
+
+\paragraph{Safe memory accesses.} Likewise it is not possible to access uninitialized memory and, since pointers are not part of the language, null pointers do not exist as well.
+
+\paragraph{Other features.} There are several smaller features, restrictions and well-chosen defaults of the Rust language that improve the robustness of programs: For example, variables are immutable by default, encouraging a less error-prone programming style. Matches (the Rust-equivalent of switch-case statements) must be exhaustive, that is each possible value of the variable that is matched must be handled by a branch, making it impossible for the programmer to forget a case. And finally, runtime errors such as IO-errors must be explicitly handled by the programmer or will lead to an immediate crash of the program, as opposed to undefined behaviour in e.g. C and C++.
+
+
+\todo{doc tests}
+
+\todo{compile-time checks of stuff, regexes, servo gc, nom?}
+
+
+\subsection{Additional tools}
+
+
+\subsubsection{Lints reported by the Rust compiler}
+
+Besides the language features outlined above, the rust compiler has some smaller ASA capabilities in the form of lints which are reported as compile warnings. They include unused imports and variables, unnecessarily mutable variables, dead code, variable and function names not following the naming conventions, and unconditional recursions. There are some more lints that are disabled by default like missing documentation of public interfaces and the usage of the \texttt{unsafe} keyword.
+
+\subsubsection{rust-clippy}
+
+Clippy \footnote{\url{https://github.com/Manishearth/rust-clippy}} is a compiler plugin that expands on the lints shipped with the Rust compiler and checks for common patterns that indicate inefficient, needlessly complex or unidiomatic Rust code. It is exceptionally easy to use since the complete procedure of setting it up consists of adding one line to the cargo configuration and main code file. Having done that, clippy will be run whenever any code in the project is compiled.\\
+\\
+
+Example of clippy output:
+{
+\scriptsize
+\begin{verbatim}
+
+servo/components/script/cors.rs:95:9: 98:10 warning: you seem to be trying to use match for destructuring
+    a single pattern. Consider using `if let`, #[warn(single_match)] on by default
+    
+servo/components/script/cors.rs:95         match referer.scheme_data {
+servo/components/script/cors.rs:96             SchemeData::Relative(ref mut data) => data.path = vec![],
+servo/components/script/cors.rs:97             _ => {}
+servo/components/script/cors.rs:98         };
+
+/servo/components/script/cors.rs:95:9: 98:10 help: try
+if let SchemeData::Relative(ref mut data) = referer.scheme_data { data.path = vec![] }
+
+for further information visit https://github.com/Manishearth/rust-clippy/wiki#single_match
+
+\end{verbatim}
+}
+
+The lints reported by clippy vary in type. Most of them are related to programming style or detecting patterns that were common in old Rust code but can be written simpler in newer versions of Rust. The \texttt{single\_match} lint in the example above is such a lint; the \texttt{if let} construct wasn't available until late 2014. Other lints detect type casts that may lead to loss of precision or truncation, boolean expressions that are tautologies, or obvious bugs like out of bounds accesses with constants. Clippy also includes two lints that warn on complex (as in deeply nested) types and methods with a high cyclomatic complexity.\\
+\\
+Servo already has clippy integrated, it can be run through \texttt{./mach clippy}. \todo{problems setting up clippy?} Running it, we made the following findings: 
+\begin{itemize}
+	\item Clippy reported 417 warnings.
+    \item Of these, 122 were in autogenerated code.
+    \item Another 11 were false positives. Several more might be false positives as well which we haven't investigated further.
+    \item The vast majority of lints pointed at code that could be simplified.
+    \item Some of these simplifications also led to potentially faster code.
+    \item There were eight warnings on complex methods and two warnings on complex types.
+    \item Not a single reported lint indicated a possible bug.
+\end{itemize}
+
+While working through the warnings, we fixed about 130 of them and made a pull request to servo \footnote{\url{https://github.com/servo/servo/pull/9123}} and reported several false positives on clippy \footnote{\url{https://github.com/Manishearth/rust-clippy/issues/528}} \footnote{\url{https://github.com/Manishearth/rust-clippy/issues/529}} \footnote{\url{https://github.com/Manishearth/rust-clippy/issues/532}}.
+
+
+\todo{what ASA techniques would be desirable? How costly would their implementation be? Possibly implement some ASA technique suitable for your project}
+
+\todo{some conclusion on clippy}
 \subsection*{Experiment with and evaluate ASA tools w.r.t. your project}
 – How good is ASA in detecting faults in your project?\\
 – How can ASA support inspection activities in your project? \\
 – How can ASA support or complement testing in your project? \\
+
+\todo{the servo lints}
+
+
+
+\subsubsection{rust-fmt}
+\todo{rust-fmt?}
 
 
 \end{document}
