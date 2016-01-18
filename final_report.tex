@@ -41,26 +41,48 @@ Potsdam\\
  \huge \bf Servo
 \end{center}
 
-\section{Application Survey}
+\section{About the Project (Application Survey)}
 
+The Servo project is developed and maintained by the free-software community Mozilla in cooperation with Samsung. Servo is an experimental web browser layout engine that tries to create a highly parallel environment where many components (like HTML parsing, image decoding, rendering, etc.) are handled by isolated tasks. At the same time it is one of the biggest projects being developed in the Rust programming language, which is developed as well by Mozilla Research.
 
-\subsection*{Which development paradigm? Which development
-language(s)?}
-Rust. Other packages with different langauges.
-\subsection*{Requirements? Specification? Documentation? Other artefacts available?}
-Servo is an open source project hosted on GitHub. As most of these project do, the core developers have established a certain GitHub workflow \footnote{https://github.com/servo/servo/wiki/Github-workflow}. It consists of... bla. Every Pull Request needs to pass the contribution checklist \footnote{https://github.com/servo/servo/blob/master/CONTRIBUTING.md}\\
+\subsection*{Main programming language: Rust}
+While some dependencies and set up code is written in a different language, the main programming language remains Rust. This works well with the main focus of Servo: a highly parallel, safe and fast alternative to current engines. Rust was designed to be just that, by requiring the programmer to be very explicit with typing and error handling. This helps catching most errors at compilation time using static analysis. More details about the features of the Rust language are explained in section \ref{rust_features}.
 
-Also hosted on github the servo wiki \footnote{https://github.com/servo/servo/wiki} can be found. It documents... bla.
+\subsection*{Requirements, Specifications and Documentation under Mozilla}
+Servo is an open source project hosted on GitHub\footnote{https://github.com/servo/servo}. As with most open source projects, the core developers have established a well documented GitHub workflow\footnote{https://github.com/servo/servo/wiki/Github-workflow}. It consists of the standard steps that go with any Github project where you don't have write access:
+\begin{enumerate}
+    \item Fork the original repository
+    \item Write and commit your contribution into a branch in your fork.
+    \item Open a Pull Request from the branch in your repository to the original one
+    \item Discuss and fix any questions and suggestions by the reviewer.
+    \item The reviewer states his approval, triggers build bot to run automated tests and merges the Pull Request
+\end{enumerate}
 
-\subsection*{Current testing status, approach? Bug repositories?}
-- GitHub's issue tracker \footnote{https://github.com/features} is used to track bugs and link the appropriate PRs fixing them to them.
+Every Pull Request needs to pass the contribution checklist\footnote{\label{contributing}https://github.com/servo/servo/blob/master/CONTRIBUTING.md}. It covers technicalities such as: Every change needs to be accompanied by ``tests relevant to the fixed bug or new feature''\footnote{See last point at footnote \ref{contributing}.} which is to be evaluated by one of the reviewers from the core team. But it also includes the Rust Code of Conduct\footnote{http://www.rust-lang.org/conduct.html} to ensure a friendly and welcoming environment for all contributors.  \\
+
+Further documentation can be found in the servo wiki\footnote{https://github.com/servo/servo/wiki} hosted on Github. In addition to the above points it includes protocol notes on the biweekly meetings, long and short term goals, and a vast amount of documents aimed at helping with development and testing.
+
+\subsection*{Current testing status}
+
+As of Jan 2015 the code base of Servo core (without dependencies) contains 110k lines of code. These are tested with about 10k tests that are devided into three different categories:
+\begin{itemize}
+    \item unit-tests:
+    \item ref-tests:
+    \item wpt-tests:
+\end{itemize}
+
+\todo{ continue here}
+
+- GitHub's issue tracker\footnote{https://github.com/features} is used to track bugs and link the appropriate Pull Requests fixing them.
 - Mozilla's mach system is used for testing.(Testing guide\footnote{https://github.com/servo/servo/wiki/Testing})
 
 
 - Servo is scheduled in Q4 2015 for alpha release ``that just works'' (mobile, but also other platforms)\footnote{https://github.com/servo/servo/wiki/Roadmap}
+
 \subsection*{What is your current personal involvement in the
 application? Developer, tester, user, etc.?}
 Aspiring user.
+
 \subsection*{Document these findings in a summary for your project report at the end of the semester}
 Done\\
 
@@ -92,6 +114,12 @@ V \& V will never be complete. Even after the release there will always be bigfi
 \subsection{Consider available artefacts, discuss \& evaluate potentials w.r.t. coverage-based testing for your application}
 
 \subsection{Develop \& document initial test plan based on your findings}
+
+
+
+
+
+\newpage
 
 
 
@@ -140,10 +168,9 @@ Servo uses \texttt{cargo test} for running the unit tests. For running the more 
 \todo{}
 
 
-
 \section{ASA}
 
-\subsection{ASA features of the Rust language}
+\subsection{ASA features of the Rust language} \label{rust_features}
 
 Rust has an extensive set of static analysis techniques built-in. They became necessary to achieve the first design goals of the language, safety, while not impeding the second and third, speed and concurrency.
 
@@ -221,8 +248,6 @@ While working through the warnings, we fixed about 130 of them and made a pull r
 – How can ASA support or complement testing in your project? \\
 
 \todo{the servo lints}
-
-
 
 \subsubsection{rust-fmt}
 \todo{rust-fmt?}
