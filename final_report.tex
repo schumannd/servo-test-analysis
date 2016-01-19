@@ -168,7 +168,12 @@ Servo uses \texttt{cargo test} for running the unit tests. For running the more 
 \todo{}
 
 
+
+
+
 \section{ASA}
+
+
 
 \subsection{ASA features of the Rust language} \label{rust_features}
 
@@ -182,12 +187,30 @@ What follows is a list of classes of errors that are prevented by the Rust compi
 
 \paragraph{Safe memory accesses.} Likewise it is not possible to access uninitialized memory and, since pointers are not part of the language, null pointers do not exist as well.
 
-\paragraph{Other features.} There are several smaller features, restrictions and well-chosen defaults of the Rust language that improve the robustness of programs: For example, variables are immutable by default, encouraging a less error-prone programming style. Matches (the Rust-equivalent of switch-case statements) must be exhaustive, that is each possible value of the variable that is matched must be handled by a branch, making it impossible for the programmer to forget a case. And finally, runtime errors such as IO-errors must be explicitly handled by the programmer or will lead to an immediate crash of the program, as opposed to undefined behaviour in e.g. C and C++.
+\paragraph{Code-generating macros.} Rust features a powerful macro syntax. Unlike in C and C++, where macros simply perform text replacements, macros in Rust are hygienic, can generate different code depending on the type of input and take a variable number of parameters among other advantages. In fact, a library has been written that expands regular expressions to native Rust code, enabling a lot of optimization potential as well as compile-time syntax checking on the expression \footnote{\url{https://github.com/rust-lang-nursery/regex}}. Another library enables specifying parsers through a macro-based API \footnote{\url{https://github.com/Geal/nom}}. The resulting parsers are extremely fast and guaranteed to be safe.
+
+\paragraph{Doctests.} As many other languages, Rust defines a syntax to document source code, and as in many other languages, the documentation can contain example code. It might look like this:
+
+\small {
+    \begin{verbatim}
+    /// Constructs a new `Rc<T>`.
+    /// # Examples
+    /// ```
+    /// use std::rc::Rc;
+    /// let five = Rc::new(5);
+    /// ```
+    pub fn new(value: T) -> Rc<T> {
+        // implementation goes here
+    }
+    \end{verbatim}
+}
+
+In Rust, however, these usage examples are executed and tested as part of \texttt{cargo test}. To simplify this process, the example code is automatically completed e.g. with a main function to make it a valid Rust program. More complex examples can be built, e.g. spanning multiple functions, and individual lines can be hidden to focus the user-visible documentation on the relevant parts. The full set of testing facilities, e.g. assertions, is available, making it possible to avoid outdated code examples altogether.
+
+\paragraph{Other features.} There are several smaller features, restrictions and well-chosen defaults of the Rust language that improve the robustness of programs: For example, variables are immutable by default, encouraging a less error-prone programming style. Matches (the Rust-equivalent of switch-case statements) must be exhaustive, that is each possible value of the variable that is matched must be handled by a branch, making it impossible for the programmer to forget a case. And finally, runtime errors such as IO-errors must be explicitly handled by the programmer or will lead to an immediate crash of the program, as opposed to undefined behavior in e.g. C and C++.
 
 
-\todo{doc tests}
 
-\todo{compile-time checks of stuff, regexes, servo gc, nom?}
 
 
 \subsection{Additional tools}
@@ -247,7 +270,9 @@ While working through the warnings, we fixed about 130 of them and made a pull r
 – How can ASA support inspection activities in your project? \\
 – How can ASA support or complement testing in your project? \\
 
-\todo{the servo lints}
+\subsection{Servo's custom lints}
+
+Additional lints are relatively easy to add to the compilation process. While clippy makes use of this feature for generally applicable lints, servo itself adds a few lints that are specialized to servo's use case. For example, some objects in the servo codebase rely on being placed on the stack instead of the heap to provide certain safety guarantees. A compile-time lint prevents encapsulating these objects in containers that would place them on the heap. Furthermore, objects that have representations in JavaScript-controlled memory are statically checked for being either a root registered with the JavaScript garbage collector or contained within such a root.
 
 \subsubsection{rust-fmt}
 \todo{rust-fmt?}
