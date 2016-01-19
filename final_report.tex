@@ -269,7 +269,7 @@ While working through the warnings, we fixed about 130 of them and made a pull r
 Additional lints are relatively easy to add to the compilation process. While clippy makes use of this feature for generally applicable lints, servo itself adds a few lints that are specialized to servo's use case. For example, some objects in the servo codebase rely on being placed on the stack instead of the heap to provide certain safety guarantees. A compile-time lint prevents encapsulating these objects in containers that would place them on the heap. Furthermore, objects that have representations in JavaScript-controlled memory are statically checked for being either a root registered with the JavaScript garbage collector or contained within such a root.
 
 \subsubsection{rust-fmt}
-\todo{rust-fmt?}
+Although not strictly being an ASA tool, rust-fmt \footnote{\url{https://github.com/rust-lang-nursery/rustfmt}} should not go unmentioned. Rust-fmt formats rust code according to the Rust style guide \footnote{\url{https://github.com/rust-lang/rust/tree/master/src/doc/style}} and an extensive set of customization parameters. With an ecosystem this young, rust-fmt and the style guide itself are still in a very early stage of development.
 
 
 \end{document}
