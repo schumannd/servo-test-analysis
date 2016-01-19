@@ -125,13 +125,6 @@ V \& V will never be complete. Even after the release there will always be bigfi
 
 \section{Test automation}
 
-\subsection{description}
-\todo {
-
-Find, experiment and evaluate test tools appropriate for your application
-
-Most important automation possibilities: Test case execution \& management, Coverage measurement
-}
 
 \subsection{cargo test}
 
@@ -160,6 +153,8 @@ Cargo's builtin testing features are not meant for large-scale applications and 
 
 Servo uses \texttt{cargo test} for running the unit tests. For running the more complex test suites, it builds the binaries with cargo but uses python scripts to execute the individual tests.
 
+\todo{expand on mach how it works, the different test suites}
+
 
 \subsection{Coverage tools}
 \todo{}
@@ -177,7 +172,7 @@ Servo uses \texttt{cargo test} for running the unit tests. For running the more 
 
 \subsection{ASA features of the Rust language} \label{rust_features}
 
-Rust has an extensive set of static analysis techniques built-in. They became necessary to achieve the first design goals of the language, safety, while not impeding the second and third, speed and concurrency.
+Rust has an extensive set of static analysis techniques built-in. They became necessary to achieve the first design goal of the language, safety, while not impeding the second and third, speed and concurrency.
 
 What follows is a list of classes of errors that are prevented by the Rust compiler. Most of them are allowed in other languages and become sources of programming errors. Finding such errors through static analysis is not always possible in other languages since they are not expressive enough and the programmer can't provide enough information in the code for an ASA tool to perform such an analysis.
 
@@ -262,13 +257,12 @@ Servo already has clippy integrated, it can be run through \texttt{./mach clippy
 While working through the warnings, we fixed about 130 of them and made a pull request to servo \footnote{\url{https://github.com/servo/servo/pull/9123}} and reported several false positives on clippy \footnote{\url{https://github.com/Manishearth/rust-clippy/issues/528}} \footnote{\url{https://github.com/Manishearth/rust-clippy/issues/529}} \footnote{\url{https://github.com/Manishearth/rust-clippy/issues/532}}.
 
 
-\todo{what ASA techniques would be desirable? How costly would their implementation be? Possibly implement some ASA technique suitable for your project}
-
 \todo{some conclusion on clippy}
-\subsection*{Experiment with and evaluate ASA tools w.r.t. your project}
-– How good is ASA in detecting faults in your project?\\
-– How can ASA support inspection activities in your project? \\
-– How can ASA support or complement testing in your project? \\
+
+\todo{some conclusion on ASA}
+
+\todo{How good is ASA in detecting faults in your project?}
+
 
 \subsection{Servo's custom lints}
 
