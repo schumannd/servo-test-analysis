@@ -208,12 +208,12 @@ In Rust, however, these usage examples are executed and tested as part of \textt
 
 
 
-\subsection{Additional tools}
+\subsection{Lints}
 
 
 \subsubsection{Lints reported by the Rust compiler}
 
-Besides the language features outlined above, the rust compiler has some smaller ASA capabilities in the form of lints which are reported as compile warnings. They include unused imports and variables, unnecessarily mutable variables, dead code, variable and function names not following the naming conventions, and unconditional recursions. There are some more lints that are disabled by default like missing documentation of public interfaces and the usage of the \texttt{unsafe} keyword.
+Besides the language features outlined above, the rust compiler has some smaller ASA capabilities in the form of lints which are reported as warnings during compilation. They include unused imports and variables, unnecessarily mutable variables, dead code, variable and function names not following the naming conventions, and unconditional recursions. There are some more lints that are disabled by default like missing documentation of public interfaces and the usage of the \texttt{unsafe} keyword.
 
 \subsubsection{rust-clippy}
 
@@ -264,11 +264,11 @@ While working through the warnings, we fixed about 130 of them and made a pull r
 \todo{How good is ASA in detecting faults in your project?}
 
 
-\subsection{Servo's custom lints}
+\subsubsection{Servo's custom lints}
 
 Additional lints are relatively easy to add to the compilation process. While clippy makes use of this feature for generally applicable lints, servo itself adds a few lints that are specialized to servo's use case. For example, some objects in the servo codebase rely on being placed on the stack instead of the heap to provide certain safety guarantees. A compile-time lint prevents encapsulating these objects in containers that would place them on the heap. Furthermore, objects that have representations in JavaScript-controlled memory are statically checked for being either a root registered with the JavaScript garbage collector or contained within such a root.
 
-\subsubsection{rust-fmt}
+\subsection{rust-fmt}
 Although not strictly being an ASA tool, rust-fmt \footnote{\url{https://github.com/rust-lang-nursery/rustfmt}} should not go unmentioned. Rust-fmt formats rust code according to the Rust style guide \footnote{\url{https://github.com/rust-lang/rust/tree/master/src/doc/style}} and an extensive set of customization parameters. With an ecosystem this young, rust-fmt and the style guide itself are still in a very early stage of development.
 
 
