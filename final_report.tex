@@ -45,10 +45,10 @@ Potsdam\\
 
 The Servo project is developed and maintained by the free-software community Mozilla in cooperation with Samsung. Servo is an experimental web browser layout engine that tries to create a highly parallel environment where many components (like HTML parsing, image decoding, rendering, etc.) are handled by isolated tasks. At the same time it is one of the biggest projects being developed in the Rust programming language, which is developed as well by Mozilla Research. We are learning Rust in our free time and wanted to test one of the major projects using it.
 
-\subsection*{Main programming language: Rust}
+\subsection{Main programming language: Rust}
 While some dependencies and set up code is written in a different language, the main programming language remains Rust. This works well with the main focus of Servo: a highly parallel, safe and fast alternative to current engines. Rust was designed to be just that, by requiring the programmer to be very explicit with typing and error handling. This helps catching most errors at compilation time using static analysis. More details about the features of the Rust language are explained in section \ref{rust_features}.
 
-\subsection*{Requirements, Specifications and Documentation under Mozilla}
+\subsection{Requirements, Specifications and Documentation under Mozilla}
 Servo is an open source project hosted on GitHub\footnote{https://github.com/servo/servo}. As with most open source projects, the core developers have established a well documented GitHub workflow\footnote{https://github.com/servo/servo/wiki/Github-workflow}. It consists of the standard steps that go with any Github project where you don't have write access:
 \begin{enumerate}
     \item Fork the original repository
@@ -62,7 +62,7 @@ Every Pull Request needs to pass the contribution checklist\footnote{\label{cont
 
 Further documentation can be found in the servo wiki\footnote{https://github.com/servo/servo/wiki} hosted on Github. In addition to the above points it includes protocol notes on the biweekly meetings, long and short term goals, and a vast amount of documents aimed at helping with development and testing.
 
-\subsection*{Current testing status}
+\subsection{Current testing status}
 
 As of Jan 2015 the code base of Servo core (without dependencies) contains 110k lines of code. These are tested with over 11,000 tests that are run using different commands: (numbers are as of January 2016):
 \begin{itemize}
@@ -77,7 +77,7 @@ As of Jan 2015 the code base of Servo core (without dependencies) contains 110k 
 
 Some other commands are still documented in the wiki and the help pages but are now deprecated (like ./mach test-content). These tests currently contain about 70-80 tests that fail intermittently.This often slows down the process of contributing working code. We encountered this while placing a Pull Request that fixed about 150 code lints found by rust-clippy (see chapter \ref{clippy}).
 
-\paragraph*{The tracking and fixing of Issues}
+\paragraph{The tracking and fixing of Issues}
 As with most open source projects hosted on Github, the issue tracker\footnote{https://github.com/features} is used to track bugs, issues and features. It employs several handy features that make it easy to organize the frequent discussions and comments surrounding Issues and Pull Request. Both get assigned numbers, which when mentioned in any comment automatically link to the corresponding Issue or Pull Request. Issues automatically record when they were ``mentioned'' in another discussion. This builds a coherent map of Issues and their corresponding fixes (WIP or not).
 
 \paragraph{Mozillas mach system}
