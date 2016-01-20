@@ -43,7 +43,7 @@ Potsdam\\
 
 \section{About the Project (Application Survey)}
 
-The Servo project is developed and maintained by the free-software community Mozilla in cooperation with Samsung. Servo is an experimental web browser layout engine that tries to create a highly parallel environment where many components (like HTML parsing, image decoding, rendering, etc.) are handled by isolated tasks. At the same time it is one of the biggest projects being developed in the Rust programming language, which is developed as well by Mozilla Research.
+The Servo project is developed and maintained by the free-software community Mozilla in cooperation with Samsung. Servo is an experimental web browser layout engine that tries to create a highly parallel environment where many components (like HTML parsing, image decoding, rendering, etc.) are handled by isolated tasks. At the same time it is one of the biggest projects being developed in the Rust programming language, which is developed as well by Mozilla Research. We are learning Rust in our free time and wanted to test one of the major projects using it.
 
 \subsection*{Main programming language: Rust}
 While some dependencies and set up code is written in a different language, the main programming language remains Rust. This works well with the main focus of Servo: a highly parallel, safe and fast alternative to current engines. Rust was designed to be just that, by requiring the programmer to be very explicit with typing and error handling. This helps catching most errors at compilation time using static analysis. More details about the features of the Rust language are explained in section \ref{rust_features}.
@@ -64,45 +64,43 @@ Further documentation can be found in the servo wiki\footnote{https://github.com
 
 \subsection*{Current testing status}
 
-As of Jan 2015 the code base of Servo core (without dependencies) contains 110k lines of code. These are tested with about 10k tests that are devided into three different categories:
+As of Jan 2015 the code base of Servo core (without dependencies) contains 110k lines of code. These are tested with over 11,000 tests that are run using different commands: (numbers are as of January 2016):
 \begin{itemize}
-    \item unit-tests:
-    \item ref-tests:
-    \item wpt-tests:
+    \item \textbf{./mach test-unit}: Runs 233 low level test binaries, that test important code. Especially used in dependencies.
+    \item \textbf{./mach test-wpt}: Runs 3764 web-platform-tests. 
+    \item \textbf{./mach test-css}: Runs 7097 CSS Working Group tests.
+    \item \textbf{./mach test-ref}: Runs 5 reference tests(including the famous acid2 test\footnote{http://www.webstandards.org/files/acid2/test.html}). These consist of rendering two pages and comparing them.
+    \item \textbf{./mach test-dromaeo}: Runs the Dromaeo test suite. This suite is geared towards javascript performance testing. It did not execute succesfully when we called it.
+    \item \textbf{./mach test-jquery}: Runs the jQuery test suite. It did not execute succesfully when we called it.
+    \item \textbf{./mach test-tidy}: Runs the source code tidiness check.
 \end{itemize}
 
-\todo{ continue here}
+Some other commands are still documented in the wiki and the help pages but are now deprecated (like ./mach test-content). These tests currently contain about 70-80 tests that fail intermittently.This often slows down the process of contributing working code. We encountered this while placing a Pull Request that fixed about 150 code lints found by rust-clippy (see chapter \ref{clippy}).
 
-- GitHub's issue tracker\footnote{https://github.com/features} is used to track bugs and link the appropriate Pull Requests fixing them.
-- Mozilla's mach system is used for testing.(Testing guide\footnote{https://github.com/servo/servo/wiki/Testing})
+\paragraph*{The tracking and fixing of Issues}
+As with most open source projects hosted on Github, the issue tracker\footnote{https://github.com/features} is used to track bugs, issues and features. It employs several handy features that make it easy to organize the frequent discussions and comments surrounding Issues and Pull Request. Both get assigned numbers, which when mentioned in any comment automatically link to the corresponding Issue or Pull Request. Issues automatically record when they were ``mentioned'' in another discussion. This builds a coherent map of Issues and their corresponding fixes (WIP or not).
+
+\paragraph{Mozillas mach system}
+Mozilla's mach system (from the german word ``machen'': to do) is at the core of the Servo project. It's usage with invoking tests was already introduced earlier. But it also makes it easy to compile and run the Servo binary or other related tools like rust-clippy (see chapter \ref{clippy}). While mach is a powerful tool it should theoretically not be necessary as the Rust language brings its own packaginf system ``cargo''
 
 
 - Servo is scheduled in Q4 2015 for alpha release ``that just works'' (mobile, but also other platforms)\footnote{https://github.com/servo/servo/wiki/Roadmap}
 
-\subsection*{What is your current personal involvement in the
-application? Developer, tester, user, etc.?}
-Aspiring user.
-
-\subsection*{Document these findings in a summary for your project report at the end of the semester}
-Done\\
 
 \section{Initial Test Plan}
-\subsection{Discuss \& evaluate five V\&V questions}
-\begin{enumerate}
-  \item When do verification and validation start? When are they complete?
+\subsection{THE five V\&V questions}
+\paragraph{When do verification and validation start? When are they complete?}
+V \& V starts with the begining of the project. As with many open source project that are developed by the community, the stakeholder or ``customer'' is the community itself. Which means that developer and customer are often the same person. In the case of servo the software is validated in bi-weekly meetings\footnote{https://github.com/servo/servo/wiki/Meetings} where both short-term next steps and long term milestones are discussed.\\
   
-  V \& V starts with the begining of the project. As with many open source project that are developed by the community, the stakeholder or ``customer'' is the community itself. Which means that developer and customer are often the same person. In the case of servo the software is validated in bi-weekly meetings\footnote{https://github.com/servo/servo/wiki/Meetings} where both short-term next steps and long term milestones are discussed.
+  Verification is done through an extensive testing system. It is maintained by every developer as every code change needs to be accompanied by a test before it is merged into the code base. This test suite runs on every reviewed pull request, via two build servers (bors-servo\footnote{https://github.com/bors-servo} and buildbot\footnote{http://servo-buildbot.pub.build.mozilla.org/}). This ensures that no new bugs are introduced into the system.\\
   
-  Verification is done through an extensive testing system. It is maintained by every developer as every code change needs to be accompanied by a test before it is merged into the code base. This test suite runs on every reviewed pull request, via two build servers (bors-servo\footnote{https://github.com/bors-servo} and buildbot\footnote{http://servo-buildbot.pub.build.mozilla.org/}). This ensures that no new bugs are introduced into the system.
-  
-V \& V will never be complete. Even after the release there will always be bigfixes or new features that need to be tested as well. One could argue that V \& V ends when the project gets abandoned but you can hardly call that a complete state.
-  \item What particular techniques should be applied during development?
+V \& V will never be complete. Even after the release there will always be bog fixes or new features that need to be tested as well. One could argue that V \& V ends when the project gets abandoned but you can hardly call that a complete state.
+\paragraph{What particular techniques should be applied during development?}
   
   The Rust language itself comes with a testing blahblah.
-  \item How can we assess the readiness of a product?
-  \item How can we control the quality of successive releases?
-  \item How can the development process itself be improved?
-\end{enumerate}
+\paragraph{How can we assess the readiness of a product?} 
+\paragraph{How can we control the quality of successive releases?}
+\paragraph{How can the development process itself be improved?}
 \subsection{Consider different test classifications, discuss \& evaluate these different test approaches w.r.t. your application:}
 
 • Validation vs. Defect Testing
@@ -156,11 +154,17 @@ Servo uses \texttt{cargo test} for running the unit tests. For running the more 
 \todo{expand on mach how it works, the different test suites}
 
 
-\subsection{Coverage tools}
-\todo{}
+\subsection{Coverage tools (kcov, gcov)}
+Not even basic statement coverage has been ever calculated for the whole Servo project. As this is one of the most common ways to indicate the completeness of the test suite we looked into creating a test coverage of Servo. We also hoped to find parts in the code base that are not yet covered by tests which we could then further examine. 
+
+\paragraph{gcov}
+Gcov is a widely used source code coverage analysis tool that comes with the GNU Compiler Collection (GCC). It is supposed to work with any LLVM-generated files. As the Rust compiler rustc uses LLVM as it's backend we tried gcov first to generate a useable test coverage report. But unfortunately rustc does not yet support all compiler flags that gcov needs to produce coverage data\footnote{Section 4 in $http://ltp.sourceforge.net/documentation/technical_papers/gcov-ols2003.pdf$}. This issue has already been reported\footnote{https://github.com/rust-lang/rfcs/issues/646} but was postponed a year ago due to the 1.0 release of rustc\footnote{https://github.com/rust-lang/rust/issues/690}. We planned on implementing gcov support for rustc wich would enable all rust projects to easily generate test coverage reports but finally decided that it would be out of scope.
+
+\paragraph{kcov}
+The community suggested to try the tool kcov. This tool works 
 
 \subsection{afl.rs?}
-\todo{}
+\todo{DAVID}
 
 
 
@@ -215,7 +219,7 @@ In Rust, however, these usage examples are executed and tested as part of \textt
 
 Besides the language features outlined above, the rust compiler has some smaller ASA capabilities in the form of lints which are reported as warnings during compilation. They include unused imports and variables, unnecessarily mutable variables, dead code, variable and function names not following the naming conventions, and unconditional recursions. There are some more lints that are disabled by default like missing documentation of public interfaces and the usage of the \texttt{unsafe} keyword.
 
-\subsubsection{rust-clippy}
+\subsubsection{rust-clippy} \label{clippy}
 
 Clippy \footnote{\url{https://github.com/Manishearth/rust-clippy}} is a compiler plugin that expands on the lints shipped with the Rust compiler and checks for common patterns that indicate inefficient, needlessly complex or unidiomatic Rust code. It is exceptionally easy to use since the complete procedure of setting it up consists of adding one line to the cargo configuration and main code file. Having done that, clippy will be run whenever any code in the project is compiled.\\
 \\
