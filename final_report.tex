@@ -154,18 +154,31 @@ Servo uses \texttt{cargo test} for running the unit tests. For running the more 
 \todo{expand on mach how it works, the different test suites}
 
 
-\subsection{Coverage tools (kcov, gcov)}
+\subsection{Coverage tools (gcov and kcov)}
 Not even basic statement coverage has been ever calculated for the whole Servo project. As this is one of the most common ways to indicate the completeness of the test suite we looked into creating a test coverage of Servo. We also hoped to find parts in the code base that are not yet covered by tests which we could then further examine. 
 
 \paragraph{gcov}
 Gcov is a widely used source code coverage analysis tool that comes with the GNU Compiler Collection (GCC). It is supposed to work with any LLVM-generated files. As the Rust compiler rustc uses LLVM as it's backend we tried gcov first to generate a useable test coverage report. But unfortunately rustc does not yet support all compiler flags that gcov needs to produce coverage data\footnote{Section 4 in $http://ltp.sourceforge.net/documentation/technical_papers/gcov-ols2003.pdf$}. This issue has already been reported\footnote{https://github.com/rust-lang/rfcs/issues/646} but was postponed a year ago due to the 1.0 release of rustc\footnote{https://github.com/rust-lang/rust/issues/690}. We planned on implementing gcov support for rustc wich would enable all rust projects to easily generate test coverage reports but finally decided that it would be out of scope.
 
 \paragraph{kcov}
-The community suggested to try the tool kcov. This tool works 
+The community suggested to try the tool kcov. It works by putting a breakpoint into every line of code and checking them off, when they fired. This increases execution time significantly but proves to be a robust way to generate code coverage as no debug flags need to be implemented. Just the existence of the basic debugging feature of setting breakpoints is enough to let kcov produce a test coverage report. It does not compile on Mac OS or Windows. So we had to start running everything in a linux (ubuntu) virtual machine which slows down execution even more. The next issue we faced was, that the version provided by the package manager (apt-get) was out of date. The solution of building the master branch source still failed until we found out that we had to inxlude libbfd-dev in the build flags.\\
 
-\subsection{afl.rs?}
-\todo{DAVID}
+Our first coverage report was created by moving the servo binary to servo\_orig and placing our own script in its place:
 
+\begin{verbatim}
+
+#!/bin/sh
+kcov --verify --exclude-pattern=/.cargo,../src /home/joda/servo/cov 
+ /home/joda/servo/servo-sync/target/debug/servo_orig "$@"
+
+\end{verbatim}
+
+Now executing \textbf{./mach test} would run our script instead of the servo binary, which passes all parameters to the original servo binary but also executes kcov. In theory this should have yielded a complete test coverage report as kcov is also supposed to properly merge several executions of the same binary which happens during testing. Unfortunately every test now took 30-60 seconds which would have taken a whole week to generate a coverage report. Also the merging of reports was not working correctly. But as the long execution time already disqualified kcov as a feasible coverage tool we did not continue working on fixing the merging problem.\\
+
+The partial coverage reports we got where also not very deterministic. Lines of code covered by one exemplary test ranged from 26976 to 27104 throughout several iterations. These fluctuations are probably caused by inaccurate behaviour of kcov. It is unlikely that they stemmed from a nondeterministic execution path in servo, but we can not be completely sure as we couldn't check the roughly 30,000 lines that were executed.
+
+\subsection{Fuzzy Testing (using afl.rs)}
+American-fuzzy-lop (afl) is a package that allows finding bugs in Rust code through fuzzy testing. It works by taking exemplary input over stdin and mutating it. But it requires that the binary that should be tested reads it's input over stdin\footnote{https://github.com/frewsxcv/afl.rs}. As Servo does not do this, we looked at Servos html-parser html5ever\footnote{https://github.com/servo/html5ever}. Here we built a test binary, that would read html code over stdin and try to parse it. During the setup we realized that afl.rs would need rust version 1.2 to work and cannot work with newer versions. html5ever however required rust 1.4 to work. This problem deemed fuzzy testing the html5ever component or Servo as a whole undoable at the moment. \todo{wurde das jetzt gefixed?}
 
 
 
