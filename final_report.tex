@@ -1,6 +1,6 @@
 \documentclass{scrartcl}
 \usepackage{amsmath, amssymb, amsthm}
-\usepackage{ngerman}
+\usepackage[british]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{geometry}
@@ -8,6 +8,9 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{listings}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+
 \geometry{top=24mm,textheight=245mm,textwidth=160mm,heightrounded,right=27mm,head=14.5pt}
 
 
@@ -62,7 +65,7 @@ Every Pull Request needs to pass the contribution checklist\footnote{\label{cont
 
 Further documentation can be found in the servo wiki\footnote{https://github.com/servo/servo/wiki} hosted on Github. In addition to the above points it includes protocol notes on the biweekly meetings, long and short term goals, and a vast amount of documents aimed at helping with development and testing.
 
-\subsection{Current testing status}
+\subsection{Current testing status} \label{test_status}
 
 As of Jan 2015 the code base of Servo core (without dependencies) contains 110k lines of code. These are tested with over 11,000 tests that are run using different commands: (numbers are as of January 2016):
 \begin{itemize}
@@ -97,24 +100,37 @@ V \& V starts with the begining of the project. As with many open source project
 V \& V will never be complete. Even after the release there will always be bog fixes or new features that need to be tested as well. One could argue that V \& V ends when the project gets abandoned but you can hardly call that a complete state.
 \paragraph{What particular techniques should be applied during development?}
   
-  The Rust language itself comes with a testing blahblah.
+\todo{do}
 \paragraph{How can we assess the readiness of a product?} 
+\todo{do}
 \paragraph{How can we control the quality of successive releases?}
+\todo{do}
 \paragraph{How can the development process itself be improved?}
-\subsection{Consider different test classifications, discuss \& evaluate these different test approaches w.r.t. your application:}
+\todo{do}
+\subsection{Test Classifications}
 
-• Validation vs. Defect Testing
+\paragraph{Validation and Defect Testing}
+The biggest part of the test suite used in the Servo project is focused on validation testing. The whole web platform test (WPT) suite and CSS WG suite are geared to validate that all aspects and features of html, css and javascript are implemented. The few ref tests contain defect tests such as the famous acid2 test. Here a lot of different html and css rules are used to draw a smiley. If any of those rules are not implemented correctly, the smiley will not be drawn correctly.
 
-• Development, Release, User Testing
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{acid2}
+    \caption{Acid2. Correct rendering on the left. All others show rendering flaws}
+\end{figure}
 
-• Unit/Component,Integration,SystemTesting
+
+
+\paragraph{Development, Release and User Testing}
+These three forms of testing are all present but hardly differentiable in the Servo project. This is due to the fact, that the core development team combines developers, release testers and users in the same team. The tests are mostly used during development for regression testing. But there is no separate test suite or separate test team used before releases. It is done by the community but mostly the core members as well. Finally the core developers are also the users, as they represent Mozilla. Ultimately Mozilla wants to replace the gecko\footnote{https://developer.mozilla.org/en-US/docs/Mozilla/Gecko} engine with Servo. Thus the core team develops, releases and decides when Servo is ready for the user: themselves. From a testers perspective this is not an optimal state to create a complete testing suite. A separate release testing team or at least an internal group posing as the "users" would be helpful to get an outside perspective on the readiness and validity of the product.
+
+\paragraph{Unit-, Integration- and System-testing}
+As can be seen in chapter \ref{test_status} the unit tests only make up a fraction of the overall test suite. Integration tests are sometimes used in the dependencies, but do not get executed when testing the main Servo binary. The biggest part are the system tests. all WPT and CSS WG tests are system level tests as they execute the servo binary and try to actually use the whole rendering engine. This testing approach that focuses mainly on system tests makes sense for testing a web engine, as there are a lot of formal requirements that can easily and exhaustively be tested on the whole product.
 
 \subsection{Consider available artefacts, discuss \& evaluate potentials w.r.t. coverage-based testing for your application}
+\todo{do}
 
 \subsection{Develop \& document initial test plan based on your findings}
-
-
-
+\todo{do}
 
 
 \newpage
@@ -154,7 +170,7 @@ Servo uses \texttt{cargo test} for running the unit tests. For running the more 
 \todo{expand on mach how it works, the different test suites}
 
 
-\subsection{Coverage tools (gcov and kcov)}
+\subsection{Coverage tools using gcov and kcov}
 Not even basic statement coverage has been ever calculated for the whole Servo project. As this is one of the most common ways to indicate the completeness of the test suite we looked into creating a test coverage of Servo. We also hoped to find parts in the code base that are not yet covered by tests which we could then further examine. 
 
 \paragraph{gcov}
@@ -175,9 +191,9 @@ kcov --verify --exclude-pattern=/.cargo,../src /home/joda/servo/cov
 
 Now executing \textbf{./mach test} would run our script instead of the servo binary, which passes all parameters to the original servo binary but also executes kcov. In theory this should have yielded a complete test coverage report as kcov is also supposed to properly merge several executions of the same binary which happens during testing. Unfortunately every test now took 30-60 seconds which would have taken a whole week to generate a coverage report. Also the merging of reports was not working correctly. But as the long execution time already disqualified kcov as a feasible coverage tool we did not continue working on fixing the merging problem.\\
 
-The partial coverage reports we got where also not very deterministic. Lines of code covered by one exemplary test ranged from 26976 to 27104 throughout several iterations. These fluctuations are probably caused by inaccurate behaviour of kcov. It is unlikely that they stemmed from a nondeterministic execution path in servo, but we can not be completely sure as we couldn't check the roughly 30,000 lines that were executed.
+The partial coverage reports we got where also not very deterministic. Lines of code covered by one exemplary test ranged from 26976 to 27104 throughout several iterations. These fluctuations are probably caused by non-deterministic behaviour of Servo but could also be caused by inaccurate coverage reports on kcovs side. We can not be completely sure as we couldn't check the roughly 30,000 lines that were executed and trace the execution path.
 
-\subsection{Fuzzy Testing (using afl.rs)}
+\subsection{Fuzzy Testing using afl.rs}
 American-fuzzy-lop (afl) is a package that allows finding bugs in Rust code through fuzzy testing. It works by taking exemplary input over stdin and mutating it. But it requires that the binary that should be tested reads it's input over stdin\footnote{https://github.com/frewsxcv/afl.rs}. As Servo does not do this, we looked at Servos html-parser html5ever\footnote{https://github.com/servo/html5ever}. Here we built a test binary, that would read html code over stdin and try to parse it. During the setup we realized that afl.rs would need rust version 1.2 to work and cannot work with newer versions. html5ever however required rust 1.4 to work. This problem deemed fuzzy testing the html5ever component or Servo as a whole undoable at the moment. \todo{wurde das jetzt gefixed?}
 
 
