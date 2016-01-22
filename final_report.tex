@@ -27,14 +27,19 @@
 \author{Johannes Linke, David Schumann}
 \maketitle
 
+
 \section{About the Project (Application Survey)}
 
-The Servo project is developed and maintained by the free-software community Mozilla in cooperation with Samsung. Servo is an experimental web browser layout engine that tries to create a highly parallel environment where many components (like HTML parsing, image decoding, rendering, etc.) are handled by isolated tasks. At the same time it is one of the biggest projects being developed in the Rust programming language, which is developed as well by Mozilla Research. We are learning Rust in our free time and wanted to test one of the major projects using it.
+The Servo project is developed and maintained by Mozilla Research in cooperation with Samsung. Servo is an experimental web browser layout engine that tries to create a highly parallel environment where many components (like HTML parsing, image decoding, rendering, etc.) are handled by isolated tasks. At the same time it is one of the biggest projects being developed in the Rust programming language, which is developed as well by Mozilla Research. We are learning Rust in our free time and wanted to test one of the major projects using it.
 
-\subsection{Main programming language: Rust}
-While some dependencies and set up code is written in a different language, the main programming language remains Rust. This works well with the main focus of Servo: a highly parallel, safe and fast alternative to current engines. Rust was designed to be just that, by requiring the programmer to be very explicit with typing and error handling. This helps catching most errors at compilation time using static analysis. More details about the features of the Rust language are explained in section \ref{rust_features}.
 
-\subsection{Requirements, Specifications and Documentation under Mozilla}
+\subsection{Main Programming Language: Rust}
+
+While some dependencies and build infrastructure code is written in different languages, the main programming language remains Rust. This works well with the main focus of Servo: a highly parallel, safe and fast alternative to current engines. Rust was designed to be just that: For instance, it is memory safe by design and requires the programmer to be very explicit with typing and error handling. This helps catching most errors at compilation time using static analysis. More details about the features of the Rust language are explained in section \ref{rust_features}.
+
+
+\subsection{Requirements, Specifications and Documentation}
+
 Servo is an open source project hosted on GitHub\footnote{\url{https://github.com/servo/servo}}. As with most open source projects, the core developers have established a well documented GitHub workflow\footnote{\url{https://github.com/servo/servo/wiki/Github-workflow}}. It consists of the standard steps that go with any Github project where you don't have write access:
 \begin{enumerate}
     \item Fork the original repository
@@ -44,37 +49,44 @@ Servo is an open source project hosted on GitHub\footnote{\url{https://github.co
     \item The reviewer states his approval, triggers build bot to run automated tests and merges the Pull Request
 \end{enumerate}
 
-Every Pull Request needs to pass the contribution checklist\footnote{\label{contributing}\url{https://github.com/servo/servo/blob/master/CONTRIBUTING.md}}. It covers technicalities such as: Every change needs to be accompanied by ``tests relevant to the fixed bug or new feature''\footnote{See last point at footnote \ref{contributing}.} which is to be evaluated by one of the reviewers from the core team. But it also includes the Rust Code of Conduct\footnote{\url{http://www.rust-lang.org/conduct.html}} to ensure a friendly and welcoming environment for all contributors.  \\
+Every Pull Request needs to pass the contribution checklist\footnote{\label{contributing}\url{https://github.com/servo/servo/blob/master/CONTRIBUTING.md}}. It covers technicalities such as: Every change needs to be accompanied by ``tests relevant to the fixed bug or new feature''\footnote{See last point at footnote \ref{contributing}.} which is to be evaluated by one of the reviewers from the core team, but it also includes the Rust Code of Conduct\footnote{\url{http://www.rust-lang.org/conduct.html}} to ensure a friendly and welcoming environment for all contributors.  \\
 
 Further documentation can be found in the servo wiki\footnote{\url{https://github.com/servo/servo/wiki}} hosted on Github. In addition to the above points it includes protocol notes on the biweekly meetings, long and short term goals, and a vast amount of documents aimed at helping with development and testing.
 
-\subsection{Current testing status} \label{test_status}
 
-As of Jan 2015 the code base of Servo core (without dependencies) contains 110k lines of code. These are tested with over 11,000 tests that are run using different commands: (numbers are as of January 2016):
+\subsection{Current Testing Status} \label{test_status}
+
+As of January 2016 the code base of Servo core (without dependencies) contains 110k lines of code. These are tested with over 11,000 tests that are run using different commands:
 \begin{itemize}
     \item \textbf{./mach test-unit}: Runs 233 low level test binaries, that test important code. Especially used in dependencies.
     \item \textbf{./mach test-wpt}: Runs 3764 web-platform-tests. 
     \item \textbf{./mach test-css}: Runs 7097 CSS Working Group tests.
-    \item \textbf{./mach test-ref}: Runs 5 reference tests(including the famous acid2 test\footnote{\url{http://www.webstandards.org/files/acid2/test.html}}). These consist of rendering two pages and comparing them.
-    \item \textbf{./mach test-dromaeo}: Runs the Dromaeo test suite. This suite is geared towards javascript performance testing. It did not execute succesfully when we called it.
-    \item \textbf{./mach test-jquery}: Runs the jQuery test suite. It did not execute succesfully when we called it.
+    \item \textbf{./mach test-ref}: Runs 5 reference tests (including the famous acid2 test\footnote{\url{http://www.webstandards.org/files/acid2/test.html}}). These consist of rendering two pages and comparing them.
+    \item \textbf{./mach test-dromaeo}: Runs the Dromaeo test suite. This suite is geared towards javascript performance testing. It did not execute successfully when we called it.
+    \item \textbf{./mach test-jquery}: Runs the jQuery test suite. It did not execute successfully when we called it.
     \item \textbf{./mach test-tidy}: Runs the source code tidiness check.
 \end{itemize}
 
-Some other commands are still documented in the wiki and the help pages but are now deprecated (like ./mach test-content). These tests currently contain about 70-80 tests that fail intermittently.This often slows down the process of contributing working code. We encountered this while placing a Pull Request that fixed about 150 code lints found by rust-clippy (see chapter \ref{clippy}).
+Some other commands are still documented in the wiki and help pages but are now deprecated (like ./mach test-content). These tests currently contain about 70-80 tests that fail intermittently. This often slows down the process of contributing working code. We encountered this while sending a Pull Request that fixed about 130 code lints found by rust-clippy (see chapter \ref{clippy}).
 
-\paragraph{The tracking and fixing of Issues}
+\paragraph{Tracking and Fixing of Issues}
 As with most open source projects hosted on Github, the issue tracker\footnote{\url{https://github.com/features}} is used to track bugs, issues and features. It employs several handy features that make it easy to organize the frequent discussions and comments surrounding Issues and Pull Request. Both get assigned numbers, which when mentioned in any comment automatically link to the corresponding Issue or Pull Request. Issues automatically record when they were ``mentioned'' in another discussion. This builds a coherent map of Issues and their corresponding fixes (WIP or not).
 
-\paragraph{Mozillas mach system}
-Mozilla's mach system (from the german word ``machen'': to do) is at the core of the Servo project. It's usage with invoking tests was already introduced earlier. But it also makes it easy to compile and run the Servo binary or other related tools like rust-clippy (see chapter \ref{clippy}). While mach is a powerful tool it should theoretically not be necessary as the Rust language brings its own packaginf system ``cargo''
+\paragraph{Mozilla's ``mach'' System}
+Mozilla's build system ``mach'' (from the german word ``machen'': to do) is at the core of the Servo project. Besides providing commands for running the various test suites as introduced earlier, it also makes it easy to compile and run the Servo binary or other related tools like rust-clippy (see chapter \ref{clippy}). While the Rust compiler brings its own package manager ``cargo'', which can also be used for compiling projects and running tests, it is not powerful enough (yet) to fulfill all the requirements a large project like servo has, and thus its commands were wrapped inside mach.
 
 
 - Servo is scheduled in Q4 2015 for alpha release ``that just works'' (mobile, but also other platforms)\footnote{\url{https://github.com/servo/servo/wiki/Roadmap}}
 
 
+
+
 \section{Initial Test Plan}
-\subsection{THE five V\&V questions}
+
+
+\subsection{The five V\&V questions}
+\todo{well...}
+
 \paragraph{When do verification and validation start? When are they complete?}
 V \& V starts with the begining of the project. As with many open source project that are developed by the community, the stakeholder or ``customer'' is the community itself. Which means that developer and customer are often the same person. In the case of servo the software is validated in bi-weekly meetings\footnote{\url{https://github.com/servo/servo/wiki/Meetings}} where both short-term next steps and long term milestones are discussed.\\
   
@@ -98,7 +110,7 @@ The development process used by Servo is very standard to many professional open
 \subsection{Test Classifications}
 
 \paragraph{Validation and Defect Testing}
-The biggest part of the test suite used in the Servo project is focused on validation testing. The whole web platform test (WPT) suite and CSS WG suite are geared to validate that all aspects and features of html, css and javascript are implemented. The few ref tests contain defect tests such as the famous acid2 test. Here a lot of different html and css rules are used to draw a smiley. If any of those rules are not implemented correctly, the smiley will not be drawn correctly.
+The biggest part of the test suite used in the Servo project is focused on validation testing. The whole web platform test (WPT) suite and CSS WG suite are geared to validate that all aspects and features of html, css and javascript are implemented. The few reference tests contain defect tests such as the famous acid2 test. Here a lot of different html and css rules are used to draw a smiley. If any of those rules are not implemented correctly, the smiley will not be drawn correctly.
 
 \begin{figure}[h]
     \centering
@@ -106,19 +118,21 @@ The biggest part of the test suite used in the Servo project is focused on valid
     \caption{Acid2. Correct rendering on the left. All others show rendering flaws}
 \end{figure}
 
-
-
 \paragraph{Development, Release and User Testing}
-These three forms of testing are all present but hardly differentiable in the Servo project. This is due to the fact, that the core development team combines developers, release testers and users in the same team. The tests are mostly used during development for regression testing. But there is no separate test suite or separate test team used before releases. It is done by the community but mostly the core members as well. Finally the core developers are also the users, as they represent Mozilla. Ultimately Mozilla wants to replace the gecko\footnote{\url{https://developer.mozilla.org/en-US/docs/Mozilla/Gecko}} engine with Servo. Thus the core team develops, releases and decides when Servo is ready for the user: themselves. From a testers perspective this is not an optimal state to create a complete testing suite. A separate release testing team or at least an internal group posing as the "users" would be helpful to get an outside perspective on the readiness and validity of the product.
+\todo{johannes not likes}
+These three forms of testing are all present but hardly differentiable in the Servo project. This is due to the fact that the core development team combines developers, release testers and users in the same team. The tests are mostly used during development for regression testing. But there is no separate test suite or separate test team used before releases. It is done by the community but mostly the core members as well. Finally the core developers are also the users, as they represent Mozilla. Ultimately Mozilla wants to replace the gecko\footnote{\url{https://developer.mozilla.org/en-US/docs/Mozilla/Gecko}} engine with Servo. Thus the core team develops, releases and decides when Servo is ready for the user: themselves. From a testers perspective this is not an optimal state to create a complete testing suite. A separate release testing team or at least an internal group posing as the "users" would be helpful to get an outside perspective on the readiness and validity of the product.
 
 \paragraph{Unit-, Integration- and System-testing}
-As can be seen in chapter \ref{test_status} the unit tests only make up a fraction of the overall test suite. Integration tests are sometimes used in the dependencies, but do not get executed when testing the main Servo binary. The biggest part are the system tests. all WPT and CSS WG tests are system level tests as they execute the servo binary and try to actually use the whole rendering engine. This testing approach that focuses mainly on system tests makes sense for testing a web engine, as there are a lot of formal requirements that can easily and exhaustively be tested on the whole product.
+As can be seen in chapter \ref{test_status}, the unit tests only make up a fraction of the overall test suite. Integration tests are sometimes used in the dependencies, but do not get executed when testing the main Servo binary. The biggest part are the system tests. All WPT and CSS WG tests are system level tests as they execute the servo binary and try to actually use the whole rendering engine by rendering a complete web page, albeit testing only for small sets of features each. This testing approach that focuses mainly on system tests makes sense for testing a web engine, as there are a lot of formal requirements that can easily and exhaustively be tested on the whole product.
+
 
 \subsection{Consider available artefacts, discuss \& evaluate potentials w.r.t. coverage-based testing for your application}
 \todo{do}
 
+
 \subsection{Develop \& document initial test plan based on your findings}
 \todo{do}
+
 
 
 
@@ -156,15 +170,16 @@ Servo uses \texttt{cargo test} for running the unit tests. For running the more 
 
 
 \subsection{Coverage tools using gcov and kcov}
-Not even basic statement coverage has been ever calculated for the whole Servo project. As this is one of the most common ways to indicate the completeness of the test suite we looked into creating a test coverage of Servo. We also hoped to find parts in the code base that are not yet covered by tests which we could then further examine. 
+
+No type of coverage has ever been calculated for the whole Servo project, not even basic statement coverage. As this is one of the most common ways to indicate the completeness of the test suite we looked into creating a test coverage of Servo. We also hoped to find parts in the code base that are not yet covered by tests which we could then further examine. 
 
 \paragraph{gcov}
-Gcov is a widely used source code coverage analysis tool that comes with the GNU Compiler Collection (GCC). It is supposed to work with any LLVM-generated files. As the Rust compiler rustc uses LLVM as it's backend we tried gcov first to generate a useable test coverage report. But unfortunately rustc does not yet support all compiler flags that gcov needs to produce coverage data\footnote{Section 4 in \url{http://ltp.sourceforge.net/documentation/technical_papers/gcov-ols2003.pdf}}. This issue has already been reported\footnote{\url{https://github.com/rust-lang/rfcs/issues/646}} but was postponed a year ago due to the 1.0 release of rustc\footnote{\url{https://github.com/rust-lang/rust/issues/690}}. We planned on implementing gcov support for rustc wich would enable all rust projects to easily generate test coverage reports but finally decided that it would be out of scope.
+Gcov\footnote{\url{https://gcc.gnu.org/onlinedocs/gcc/Gcov.html}} is a widely used source code coverage analysis tool that comes with the GNU Compiler Collection (GCC). It is supposed to work with any LLVM-generated files. As the Rust compiler rustc uses LLVM as its backend we tried gcov first to generate a useable test coverage report. Unfortunately, rustc does not yet support all compiler flags that gcov needs to produce coverage data\footnote{Section 4 in \url{http://ltp.sourceforge.net/documentation/technical_papers/gcov-ols2003.pdf}}. This issue has already been reported\footnote{\url{https://github.com/rust-lang/rfcs/issues/646}} but was postponed a year ago due to the 1.0 release of rustc\footnote{\url{https://github.com/rust-lang/rust/issues/690}}. We briefly considered implementing gcov support for rustc which would enable all rust projects to easily generate test coverage reports, but quickly realized that it would be out of scope.
 
 \paragraph{kcov}
-The community suggested to try the tool kcov. It works by putting a breakpoint into every line of code and checking them off, when they fired. This increases execution time significantly but proves to be a robust way to generate code coverage as no debug flags need to be implemented. Just the existence of the basic debugging feature of setting breakpoints is enough to let kcov produce a test coverage report. It does not compile on Mac OS or Windows. So we had to start running everything in a linux (ubuntu) virtual machine which slows down execution even more. The next issue we faced was, that the version provided by the package manager (apt-get) was out of date. The solution of building the master branch source still failed until we found out that we had to inxlude libbfd-dev in the build flags.\\
+The community suggested to try the tool kcov\footnote{\url{https://simonkagstrom.github.io/kcov/}}, which has been used successfully for smaller Rust projects. It works by inserting breakpoints into every line of code and checking them off when they are triggered. This increases execution time significantly but proves to be a robust way to generate code coverage, as it works on arbitrary binaries with debug symbols. Therefore, generating correct debug symbols is enough to let kcov produce a test coverage report. Unfortunately, it does not compile on Mac OS or Windows, so we had to run our tests in a linux (ubuntu) virtual machine which slows down execution even more. Another issue we faced was that the version provided by the package manager (apt-get) was out of date. Compiling kcov from source failed at first, but was quickly fixed by adding another dependency (libbfd-dev) to the build flags.\\
 
-Our first coverage report was created by moving the servo binary to servo\_orig and placing our own script in its place:
+Since servo relies on mach to prepare the running environment, we couldn't start kcov on the servo binary directly. Instead, our first coverage report was created by moving the servo binary to servo\_orig and placing the following script in its place:
 
 \begin{verbatim}
 
@@ -174,18 +189,19 @@ kcov --verify --exclude-pattern=/.cargo,../src /home/joda/servo/cov
 
 \end{verbatim}
 
-Now executing \textbf{./mach test} would run our script instead of the servo binary, which passes all parameters to the original servo binary but also executes kcov. In theory this should have yielded a complete test coverage report as kcov is also supposed to properly merge several executions of the same binary which happens during testing. Unfortunately every test now took 30-60 seconds which would have taken a whole week to generate a coverage report. Also the merging of reports was not working correctly. But as the long execution time already disqualified kcov as a feasible coverage tool we did not continue working on fixing the merging problem.\\
+Now executing \textbf{./mach test} would run our script instead of the servo binary, which passes all parameters to the original servo binary but also executes kcov. In theory this should have yielded a complete test coverage report as kcov is also supposed to properly merge several executions of the same binary, which was a necessary feature since mach restarts servo for each of its tests. Unfortunately every test took 30-60 seconds which implied a whole week of running time to generate a complete coverage report. Also the merging of reports was not working correctly. But as the long execution time already disqualified kcov as a feasible coverage tool we did not continue working on fixing the merging problem.\\
 
-The partial coverage reports we got where also not very deterministic. Lines of code covered by one exemplary test ranged from 26976 to 27104 throughout several iterations. These fluctuations are probably caused by non-deterministic behaviour of Servo but could also be caused by inaccurate coverage reports on kcovs side. We can not be completely sure as we couldn't check the roughly 30,000 lines that were executed and trace the execution path.
+Additionally, the partial coverage reports we got differed from test run to test run. Lines of code covered by one exemplary test ranged from 26976 to 27104 throughout several iterations. These fluctuations are probably caused by non-deterministic behaviour of Servo but could also be caused by inaccurate coverage reports on kcovs side. We can not be completely sure as it would have been infeasible to check the roughly 30,000 lines that were executed in one test run and trace the execution path.
+
 
 \subsection{Fuzzy Testing using afl.rs}
-American-fuzzy-lop (afl) is a package that allows finding bugs in Rust code through fuzzy testing. It works by taking exemplary input over stdin and mutating it. But it requires that the binary that should be tested reads it's input over stdin\footnote{\url{https://github.com/frewsxcv/afl.rs}}. As Servo does not do this, we looked at Servos html-parser html5ever\footnote{\url{https://github.com/servo/html5ever}}. Here we built a test binary, that would read html code over stdin and try to parse it. During the setup we realized that afl.rs would need rust version 1.2 to work and cannot work with newer versions. html5ever however required rust 1.4 to work. This problem deemed fuzzy testing the html5ever component or Servo as a whole undoable at the moment. \todo{wurde das jetzt gefixed?}
+
+afl.rs\footnote{\url{https://github.com/frewsxcv/afl.rs}}, based on American fuzzy lop\footnote{\url{http://lcamtuf.coredump.cx/afl/}}, is a package that allows finding bugs in Rust code through fuzzy testing. It works by taking exemplary input over stdin and mutating it. As a consequence, it requires that the binary to test reads its input over stdin. As Servo does not do this, we looked at Servos html-parser html5ever\footnote{\url{https://github.com/servo/html5ever}} instead. Here we built a test binary that would read html code over stdin and try to parse it. During the setup we realized that afl.rs currently requires quite an old version of Rust (1.2) due to a bug in newer Rust versions\footnote{\url{https://github.com/frewsxcv/afl.rs/issues/11}}. html5ever, however, required Rust 1.4 to work. This problem deemed fuzzy testing the html5ever component or Servo as a whole impossible without extensive debugging of the Rust compiler.
 
 
 
 
 \section{ASA}
-
 
 
 \subsection{ASA features of the Rust language} \label{rust_features}
@@ -223,11 +239,7 @@ In Rust, however, these usage examples are executed and tested as part of \textt
 \paragraph{Other features.} There are several smaller features, restrictions and well-chosen defaults of the Rust language that improve the robustness of programs: For example, variables are immutable by default, encouraging a less error-prone programming style. Matches (the Rust-equivalent of switch-case statements) must be exhaustive, that is each possible value of the variable that is matched must be handled by a branch, making it impossible for the programmer to forget a case. And finally, runtime errors such as IO-errors must be explicitly handled by the programmer or will lead to an immediate crash of the program, as opposed to undefined behavior in e.g. C and C++.
 
 
-
-
-
 \subsection{Lints}
-
 
 \subsubsection{Lints reported by the Rust compiler}
 
@@ -286,7 +298,9 @@ While working through the warnings, we fixed about 130 of them and made a pull r
 
 Additional lints are relatively easy to add to the compilation process. While clippy makes use of this feature for generally applicable lints, servo itself adds a few lints that are specialized to servo's use case. For example, some objects in the servo codebase rely on being placed on the stack instead of the heap to provide certain safety guarantees. A compile-time lint prevents encapsulating these objects in containers that would place them on the heap. Furthermore, objects that have representations in JavaScript-controlled memory are statically checked for being either a root registered with the JavaScript garbage collector or contained within such a root.
 
+
 \subsection{rust-fmt}
+
 Although not strictly being an ASA tool, rust-fmt \footnote{\url{https://github.com/rust-lang-nursery/rustfmt}} should not go unmentioned. Rust-fmt formats rust code according to the Rust style guide \footnote{\url{https://github.com/rust-lang/rust/tree/master/src/doc/style}} and an extensive set of customization parameters. With an ecosystem this young, rust-fmt and the style guide itself are still in a very early stage of development.
 
 
