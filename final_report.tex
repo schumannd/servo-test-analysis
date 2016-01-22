@@ -2,7 +2,11 @@
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage[british]{babel}
 \usepackage[utf8]{inputenc}
+
+\usepackage{lmodern}
 \usepackage[T1]{fontenc}
+\usepackage[babel=true]{microtype}
+
 \usepackage{geometry}
 \usepackage{color}
 \usepackage{graphicx}
@@ -11,38 +15,17 @@
 \usepackage{graphicx}
 \graphicspath{ {images/} }
 
-\geometry{top=24mm,textheight=245mm,textwidth=160mm,heightrounded,right=27mm,head=14.5pt}
-
-
 \newcommand{\todo}[1] {{\color{red}(TODO: #1)}}
 
 
-%\renewcommand{\labelenumi}{\alph{enumi})}
-\setlength{\parindent}{0mm}
-
 
 \begin{document}
-\pagestyle{plain}
 
 
-\noindent
-\begin{minipage}{0.66\textwidth}
-Testen, Verifizieren, Analysieren\\
-von Software WS 15/16\\
-~\\
-\textbf{Johannes Linke, David Schumann}
-\end{minipage}
-~
-\begin{minipage}{0.30\textwidth}
-Hasso-Plattner-Institut\\
-Potsdam\\
-\today
-\end{minipage}
-
-
-\begin{center}
- \huge \bf Servo
-\end{center}
+\title{Servo}
+\subtitle{An Analysis for "Testen, Verifizieren und Analysieren von Software", Winter Term 2015/16, Hasso-Plattner-Institute}
+\author{Johannes Linke, David Schumann}
+\maketitle
 
 \section{About the Project (Application Survey)}
 
