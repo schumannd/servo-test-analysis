@@ -72,7 +72,7 @@ Servo is an open source project hosted on GitHub\footnote{\url{https://github.co
     \item The reviewer states his approval, triggers the build bot to run automated tests and merges the pull request
 \end{enumerate}
 
-Every pull request needs to pass the contribution checklist\footnote{\label{contributing}\url{https://github.com/servo/servo/blob/master/CONTRIBUTING.md}}. It covers technicalities such as: Every change needs to be accompanied by ``tests relevant to the fixed bug or new feature''\footnote{See last point 	 footnote \ref{contributing}.},  which is to be evaluated by one of the reviewers from the core team, but it also includes the Rust Code of Conduct\footnote{\url{http://www.rust-lang.org/conduct.html}} to ensure a friendly and welcoming environment for all contributors.  \\
+Every pull request needs to pass the contribution checklist\footnote{\label{contributing}\url{https://github.com/servo/servo/blob/master/CONTRIBUTING.md}}. It covers technicalities such as: Every change needs to be accompanied by ``tests relevant to the fixed bug or new feature''\footnote{See last point at footnote \ref{contributing}.},  which is to be evaluated by one of the reviewers from the core team, but it also includes the Rust Code of Conduct\footnote{\url{http://www.rust-lang.org/conduct.html}} to ensure a friendly and welcoming environment for all contributors.  \\
   
 Verification is done through an extensive testing system. It is maintained by every developer as every code change needs to be accompanied by tests. This test suite runs on every reviewed pull request, via two build servers (bors-servo\footnote{\url{https://github.com/bors-servo}} and buildbot\footnote{\url{http://servo-buildbot.pub.build.mozilla.org/}}). This ensures that no new bugs are introduced into the system.\\
 
@@ -280,7 +280,7 @@ Besides the language features outlined above, the rust compiler has some smaller
 \subsubsection{rust-clippy} \label{clippy}
 
 Clippy \footnote{\url{https://github.com/Manishearth/rust-clippy}} is a compiler plugin that expands on the lints shipped with the Rust compiler and checks for common patterns that indicate inefficient, needlessly complex or unidiomatic Rust code. It is exceptionally easy to use since the complete procedure of setting it up consists of adding one line to the cargo configuration and main code file. Having done that, clippy will be run whenever any code in the project is compiled.\\
-\\
+\newpage
 Example of clippy output:
 {
 \scriptsize
