@@ -23,18 +23,37 @@
 
 
 \title{Servo}
-\subtitle{An Analysis for "Testen, Verifizieren und Analysieren von Software", Winter Term 2015/16, Hasso-Plattner-Institute}
-\author{Johannes Linke, David Schumann}
+\author{\\ Johannes Linke, David Schumann\\ Hasso Plattner Institute, University of Potsdam, Germany\\ \\ \\
+Lecture ``Testen, Verifizieren und Analysieren von Software''\\ Winter Term 2015/2016\\ Supervision: Dr. Leen Lambers \vspace{320px}}
+
 \maketitle
+\thispagestyle{empty}
+
+\newpage
+
+\tableofcontents
+
+\newpage
 
 
-\section{About the Project}
+
+\section{Introduction}
 
 The current generation of web browsers (Internet Explorer, Chrome, Firefox, and Safari) are mostly built on old and large code bases, and important design decisions whose results are visible still today have been made in a time where the IT landscape looked vastly different in terms of hardware, end-user device form factors, and security.
 
 The Servo project aims at building a new browser engine for today's requirements. It is designed to be highly parallel, leveraging multi-core hardware and saving power on mobile devices, and exceptionally secure, by using a new programming language that eliminates certain classes of security-relevant programming errors.
 
-The Servo project is developed and maintained by Mozilla Research in cooperation with Samsung. It is one of the largest projects being written in the Rust programming language, which is developed as well by Mozilla Research. We are learning Rust in our free time and wanted to test one of the major projects using it.
+The Servo project is developed and maintained by Mozilla Research in cooperation with Samsung. It is one of the largest projects being written in the Rust programming language, which is developed as well by Mozilla Research.
+
+The authors of this report are learning Rust in their free time and wanted to test one of the major projects using it.
+
+
+\newpage
+
+
+\section{Application Survey}
+
+In this section, we'll shortly discuss the choice of programming language for Servo, the \todo{that headline}, the testing and build infrastructure, and the Servo's roadmap.
 
 
 \subsection{Main Programming Language: Rust}
@@ -58,6 +77,8 @@ Every Pull Request needs to pass the contribution checklist\footnote{\label{cont
 
 Further documentation can be found in the Servo wiki\footnote{\url{https://github.com/servo/servo/wiki}} hosted on Github. In addition to the above points it includes protocol notes on the biweekly meetings, long and short term goals, and a vast amount of documents aimed at helping with development and testing.
 
+\paragraph{Tracking and Fixing of Issues}
+As with most open source projects hosted on Github, the issue tracker\footnote{\url{https://github.com/features}} is used to track bugs, issues and features. It employs several handy features that make it easy to organize the frequent discussions and comments surrounding Issues and Pull Request. Both get assigned numbers, which when mentioned in any comment automatically link to the corresponding Issue or Pull Request. Issues automatically record when they were ``mentioned'' in another discussion. This builds a coherent map of Issues and their corresponding fixes (WIP or not).
 
 \subsection{Current Testing Status} \label{test_status}
 
@@ -74,19 +95,18 @@ As of January 2016 the code base of Servo core (without dependencies) contains 1
 
 Some other commands are still documented in the wiki and help pages but are now deprecated (like ./mach test-content). These tests currently contain about 70-80 tests that fail intermittently. This often slows down the process of contributing working code. We encountered this while sending a Pull Request that fixed about 130 code lints found by rust-clippy (see chapter \ref{clippy}).
 
-\paragraph{Tracking and Fixing of Issues}
-As with most open source projects hosted on Github, the issue tracker\footnote{\url{https://github.com/features}} is used to track bugs, issues and features. It employs several handy features that make it easy to organize the frequent discussions and comments surrounding Issues and Pull Request. Both get assigned numbers, which when mentioned in any comment automatically link to the corresponding Issue or Pull Request. Issues automatically record when they were ``mentioned'' in another discussion. This builds a coherent map of Issues and their corresponding fixes (WIP or not).
 
 \paragraph{Mozilla's ``mach'' System}
-Mozilla's build system ``mach'' (from the german word ``machen'': to do) is at the core of the Servo project. Besides providing commands for running the various test suites as introduced earlier, it also makes it easy to compile and run the Servo binary or other related tools like rust-clippy (see chapter \ref{clippy}). While the Rust compiler brings its own package manager ``cargo'', which can also be used for compiling projects and running tests, it is not powerful enough (yet) to fulfill all the requirements a large project like Servo has, and thus its commands were wrapped inside mach.
+Mozilla's build system ``mach'' (from the german word ``machen'': to do) is at the core of the Servo project. Besides providing commands for running the various test suites as introduced above, it also makes it easy to compile and run the Servo binary or other related tools like rust-clippy (see chapter \ref{clippy}). While the Rust compiler brings its own package manager ``cargo'', which can also be used for compiling projects and running tests, it is not powerful enough (yet) to fulfill all the requirements a large project like Servo has, and thus its commands were wrapped inside mach.
 
 
 \subsection{Servo's Roadmap}
 Short-term goals of the Servo project are Windows support, finishing WebRender, a GPU-based rendering engine, and adding a GUI to Servo, whose window currently consists solely of the rendered output without GUI controls.
  
-Being a research project, Servo's long-term outcomes are rather open-ended, but preliminary performance testing shows major advantages over Gecko, the engine of Firefox, besides the security improvements that come naturally with choosing Rust and large architectural improvements made possible by the clean-slate approach. Replacing Gecko with Servo in Mozilla's Firefox products appears like a reasonable goal, albeit the project is years away from implementing all of Gecko's functionality. As a compromise, Mozilla plans to use smaller, isolated modules written for Servo in Gecko, and will evaluate the feasibility of a standalone Servo browser, most likely starting with the Android platform.
+Being a research project, Servo's long-term outcomes are rather open-ended, but preliminary performance testing shows major advantages over Gecko, the engine of Firefox, besides the security improvements that come naturally with choosing Rust and large architectural improvements made possible by the clean-slate approach. Replacing Gecko with Servo in Mozilla's Firefox products appears like a reasonable goal, albeit the project is years away from implementing all of Gecko's functionality. As a compromise, Mozilla plans to use smaller, isolated modules written for Servo in Gecko, and will evaluate the feasibility of a standalone Servo browser, most likely starting with the Android platform\footnote{\url{https://github.com/servo/servo/wiki/Roadmap}}.
 
 
+\newpage
 
 
 \section{Initial Test Plan}
@@ -128,7 +148,7 @@ The biggest part of the test suite used in the Servo project is focused on valid
 
 \paragraph{Development, Release and User Testing}
 \todo{johannes not likes}
-These three forms of testing are all present but hardly differentiable in the Servo project. This is due to the fact that the core development team combines developers, release testers and users in the same team. The tests are mostly used during development for regression testing. But there is no separate test suite or separate test team used before releases. It is done by the community but mostly the core members as well. Finally the core developers are also the users, as they represent Mozilla. Ultimately Mozilla wants to replace the gecko\footnote{\url{https://developer.mozilla.org/en-US/docs/Mozilla/Gecko}} engine with Servo. Thus the core team develops, releases and decides when Servo is ready for the user: themselves. From a testers perspective this is not an optimal state to create a complete testing suite. A separate release testing team or at least an internal group posing as the "users" would be helpful to get an outside perspective on the readiness and validity of the product.
+These three forms of testing are all present but hardly differentiable in the Servo project. This is due to the fact that the core development team combines developers, release testers and users in the same team. The tests are mostly used during development for regression testing. But there is no separate test suite or separate test team used before releases. It is done by the community but mostly the core members as well. Finally the core developers are also the users, as they represent Mozilla. Ultimately Mozilla wants to replace the Gecko\footnote{\url{https://developer.mozilla.org/en-US/docs/Mozilla/Gecko}} engine with Servo. Thus the core team develops, releases and decides when Servo is ready for the user: themselves. From a testers perspective this is not an optimal state to create a complete testing suite. A separate release testing team or at least an internal group posing as the "users" would be helpful to get an outside perspective on the readiness and validity of the product.
 
 \paragraph{Unit-, Integration- and System-testing}
 As can be seen in chapter \ref{test_status}, the unit tests only make up a fraction of the overall test suite. Integration tests are sometimes used in the dependencies, but do not get executed when testing the main Servo binary. The biggest part are the system tests. All WPT and CSS WG tests are system level tests as they execute the Servo binary and try to actually use the whole rendering engine by rendering a complete web page, albeit testing only for small sets of features each. This testing approach that focuses mainly on system tests makes sense for testing a web engine, as there are a lot of formal requirements that can easily and exhaustively be tested on the whole product.
@@ -142,10 +162,12 @@ As can be seen in chapter \ref{test_status}, the unit tests only make up a fract
 \todo{do}
 
 
+\newpage
 
 
 \section{Test automation}
 
+This section introduces several tools that run tests on software written in Rust and collect coverage.
 
 \subsection{cargo test}
 
@@ -205,28 +227,9 @@ Additionally, the partial coverage reports we got differed from test run to test
 afl.rs\footnote{\url{https://github.com/frewsxcv/afl.rs}}, based on American fuzzy lop\footnote{\url{http://lcamtuf.coredump.cx/afl/}}, is a package that allows finding bugs in Rust code through fuzzy testing. It works by taking exemplary input over stdin and mutating it. As a consequence, it requires that the binary to test reads its input over stdin. As Servo does not do this, we looked at Servos html-parser html5ever\footnote{\url{https://github.com/servo/html5ever}} instead. Here we built a test binary that would read html code over stdin and try to parse it. During the setup we realized that afl.rs currently requires quite an old version of Rust (1.2) due to a bug in newer Rust versions\footnote{\url{https://github.com/frewsxcv/afl.rs/issues/11}}. html5ever, however, required Rust 1.4 to work. This problem deemed fuzzy testing the html5ever component or Servo as a whole impossible without extensive debugging of the Rust compiler.
 
 
+\subsection{Doctests}
 
-
-\section{ASA}
-
-
-\subsection{ASA Features of the Rust Language} \label{rust_features}
-
-Rust has an extensive set of static analysis techniques built-in. They became necessary to achieve the first design goal of the language, safety, while not impeding the second and third, speed and concurrency.
-
-For Servo, these ASA techniques are a crucial part of its security concept. For instance, a large fraction of the security vulnerabilities in Gecko, the engine currently used in Firefox, are related to use-after-free bugs, which are completely eliminated by the Rust compiler.
-
-In the following we describe some of Rust's language concepts that let the Rust compiler prevent certain classes of programming errors that frequently occur in other languages. Finding such errors through static analysis is not always possible in other languages since they are not expressive enough and the programmer can't provide enough information in the code for an ASA tool to perform such an analysis.
-
-\paragraph{Ownership.} In Rust, variables and objects are always ``owned'' by a scope (usually, a block of code delimited by curly braces) or another object. This ownership can be moved, for example by calling a method and handing over the object as a parameter, but the language provides no way to copy the ownership to an object. This way, the owner of an object can be statically determined, and, more importantly, each object can be deleted if its owning object is deleted or the owning scope ends. This way, it can be determined at compile-time when each object has to be deleted, completely eliminating use-after-free bugs, a common source for crashes and security vulnerabilities, and preventing most classes of memory leaks.
-
-\paragraph{Borrowing.} To allow for more flexible movement of data, objects can be temporarily borrowed into other scopes. The compiler statically ensures that there exists either exactly one mutable borrow, through which the object can be mutated, or any number of immutable borrows. By preventing shared mutable state, a lot of programming errors are made impossible, for example data races. A data race occurs if two threads access the same data in an unsynchronized fashion and at least one of them writes. Since there can be only one thread writing at one specific data point at the same time, data races cannot happen. Iterator invalidation is another problem detected at compile time: Since iterating over a container mutably borrows the container, modifying the container, which would need to happen through a second mutable borrow, is not possible.
-
-\paragraph{Safe memory accesses.} Likewise it is not possible to access uninitialized memory and, since pointers are not part of the language, null pointers do not exist as well. Not an ASA technique but related to memory safety are the run-time bounds checks that are mandatory for all Rust data containers.
-
-\paragraph{Code-generating macros.} Rust features a powerful macro syntax. Unlike in C and C++, where macros simply perform text replacements, macros in Rust are hygienic, can generate different code depending on the type of input and take a variable number of parameters among other advantages. In fact, a library has been written that expands regular expressions to native Rust code, enabling a lot of optimization potential as well as compile-time syntax checking on the expression \footnote{\url{https://github.com/rust-lang-nursery/regex}}. Another library enables specifying parsers through a macro-based API \footnote{\url{https://github.com/Geal/nom}}. The resulting parsers are extremely fast and guaranteed to be safe.
-
-\paragraph{Doctests.} As many other languages, Rust defines a syntax to document source code, and as in many other languages, the documentation can contain example code. It might look like this:
+As many other languages, Rust defines a syntax to document source code, and as in many other languages, the documentation can contain example code. It might look like this:
 
 \small {
     \begin{verbatim}
@@ -243,6 +246,30 @@ In the following we describe some of Rust's language concepts that let the Rust 
 }
 
 In Rust, however, these usage examples are executed and tested as part of \texttt{cargo test}. To simplify this process, the example code is automatically completed e.g. with a main function to make it a valid Rust program. More complex examples can be built, e.g. spanning multiple functions, and individual lines can be hidden to focus the user-visible documentation on the relevant parts. The full set of testing facilities, e.g. assertions, is available, making it possible to avoid outdated code examples altogether.
+
+
+\newpage
+
+
+\section{Automatic Static Analysis}
+
+This section discusses various automatic static analysis (ASA) features and tools available for projects written in the Rust language.
+
+\subsection{ASA Features of the Rust Language} \label{rust_features}
+
+Rust has an extensive set of static analysis techniques built-in. They became necessary to achieve the first design goal of the language, safety, while not impeding the second and third, speed and concurrency.
+
+For Servo, these ASA techniques are a crucial part of its security concept. For instance, a large fraction of the security vulnerabilities in Gecko, the engine currently used in Firefox, are related to use-after-free bugs, which are completely eliminated by the Rust compiler.
+
+In the following we describe some of Rust's language concepts that let the Rust compiler prevent certain classes of programming errors that frequently occur in other languages. Finding such errors through static analysis is not always possible in other languages since they are not expressive enough and the programmer can't provide enough information in the code for an ASA tool to perform such an analysis.
+
+\paragraph{Ownership.} In Rust, variables and objects are always ``owned'' by a scope (usually, a block of code delimited by curly braces) or another object. This ownership can be moved, for example by calling a method and handing over the object as a parameter, but the language provides no way to copy the ownership to an object. This way, the owner of an object can be statically determined, and, more importantly, each object can be deleted if its owning object is deleted or the owning scope ends. This way, it can be determined at compile-time when each object has to be deleted, completely eliminating use-after-free bugs, a common source for crashes and security vulnerabilities, and preventing most classes of memory leaks.
+
+\paragraph{Borrowing.} To allow for more flexible movement of data, objects can be temporarily borrowed into other scopes. The compiler statically ensures that there exists either exactly one mutable borrow, through which the object can be mutated, or any number of immutable borrows. By preventing shared mutable state, a lot of programming errors are made impossible, for example data races. A data race occurs if two threads access the same data in an unsynchronized fashion and at least one of them writes. Since there can be only one thread writing at one specific data point at the same time, data races cannot happen. Iterator invalidation is another problem detected at compile time: Since iterating over a container mutably borrows the container, modifying the container, which would need to happen through a second mutable borrow, is not possible.
+
+\paragraph{Safe memory accesses.} Likewise it is not possible to access uninitialized memory and, since pointers are not part of the language, null pointers do not exist as well. Not an ASA technique but related to memory safety are the run-time bounds checks that are mandatory for all Rust data containers.
+
+\paragraph{Code-generating macros.} Rust features a powerful macro syntax. Unlike in C and C++, where macros simply perform text replacements, macros in Rust are hygienic, can generate different code depending on the type of input and take a variable number of parameters among other advantages. In fact, a library has been written that expands regular expressions to native Rust code, enabling a lot of optimization potential as well as compile-time syntax checking on the expression \footnote{\url{https://github.com/rust-lang-nursery/regex}}. Another library enables specifying parsers through a macro-based API \footnote{\url{https://github.com/Geal/nom}}. The resulting parsers are extremely fast and guaranteed to be safe.
 
 \paragraph{Other features.} There are several smaller features, restrictions and well-chosen defaults of the Rust language that improve the robustness of programs, some of them being ASA techniques: For example, variables are immutable by default, encouraging a less error-prone programming style. Matches (the Rust-equivalent of switch-case statements) must be exhaustive, that is each possible value of the variable that is matched must be handled by a branch, making it impossible for the programmer to forget a case. Integer overflows, being another source of programming errors and security vulnerabilities, make Rust programs crash when compiled in debug mode. And finally, runtime errors such as IO-errors must be explicitly handled by the programmer or will lead to an immediate crash of the program, as opposed to undefined behavior in e.g. C and C++.
 
@@ -263,13 +290,13 @@ Example of clippy output:
 \scriptsize
 \begin{verbatim}
 
-servo/components/script/cors.rs:95:9: 98:10 warning: you seem to be trying to use match for destructuring
-    a single pattern. Consider using `if let`, #[warn(single_match)] on by default
+servo/components/script/cors.rs:95:9: 98:10 warning: you seem to be trying to use match for
+    destructuring a single pattern. Consider using `if let`, #[warn(single_match)] on by default
     
-servo/components/script/cors.rs:95         match referer.scheme_data {
-servo/components/script/cors.rs:96             SchemeData::Relative(ref mut data) => data.path = vec![],
-servo/components/script/cors.rs:97             _ => {}
-servo/components/script/cors.rs:98         };
+servo/components/script/cors.rs:95   match referer.scheme_data {
+servo/components/script/cors.rs:96       SchemeData::Relative(ref mut data) => data.path = vec![],
+servo/components/script/cors.rs:97       _ => {}
+servo/components/script/cors.rs:98   };
 
 /servo/components/script/cors.rs:95:9: 98:10 help: try
 if let SchemeData::Relative(ref mut data) = referer.scheme_data { data.path = vec![] }
