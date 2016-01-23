@@ -187,7 +187,7 @@ test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured
 
 Any crashes inside the tests (e.g. by failing assertions) are interpreted as test failures, methods that exit normally are successes.
 
-Cargo's builtin testing features are not meant for large-scale applications and test suites. There are some smaller libraries like stainless \footnote{\url{https://github.com/reem/stainless}} that are extending on cargo's features, e.g. by adding setup and teardown methods, but such libraries haven't seen much use yet. 
+Cargo's builtin testing features are not meant for large-scale applications and test suites. There are some smaller libraries like stainless\footnote{\url{https://github.com/reem/stainless}} that are extending on cargo's features, e.g. by adding setup and teardown methods, but such libraries haven't seen much use yet. 
 
 Servo uses \texttt{cargo test} for running the unit tests. For running the more complex test suites, it builds the binaries with cargo but uses python scripts to execute the individual tests. See chapter \ref{test_status} for more details.
 
@@ -264,7 +264,7 @@ In the following we describe some of Rust's language concepts that let the Rust 
 
 \paragraph{Safe memory accesses} Likewise it is not possible to access uninitialized memory and, since pointers are not part of the language, null pointers do not exist as well. Not an ASA technique but related to memory safety are the run-time bounds checks that are mandatory for all Rust data containers.
 
-\paragraph{Code-generating macros} Rust features a powerful macro syntax. Unlike in C and C++, where macros simply perform text replacements, macros in Rust are hygienic, can generate different code depending on the type of input and take a variable number of parameters among other advantages. In fact, a library has been written that expands regular expressions to native Rust code, enabling a lot of optimization potential as well as compile-time syntax checking on the expression \footnote{\url{https://github.com/rust-lang-nursery/regex}}. Another library enables specifying parsers through a macro-based API \footnote{\url{https://github.com/Geal/nom}}. The resulting parsers are extremely fast and guaranteed to be safe.
+\paragraph{Code-generating macros} Rust features a powerful macro syntax. Unlike in C and C++, where macros simply perform text replacements, macros in Rust are hygienic, can generate different code depending on the type of input and take a variable number of parameters among other advantages. In fact, a library has been written that expands regular expressions to native Rust code, enabling a lot of optimization potential as well as compile-time syntax checking on the expression\footnote{\url{https://github.com/rust-lang-nursery/regex}}. Another library enables specifying parsers through a macro-based API\footnote{\url{https://github.com/Geal/nom}}. The resulting parsers are extremely fast and guaranteed to be safe.
 
 \paragraph{Other features} There are several smaller features, restrictions and well-chosen defaults of the Rust language that improve the robustness of programs, some of them being ASA techniques: For example, variables are immutable by default, encouraging a less error-prone programming style. Matches (the Rust-equivalent of switch-case statements) must be exhaustive, that is each possible value of the variable that is matched must be handled by a branch, making it impossible for the programmer to forget a case. Integer overflows, being another source of programming errors and security vulnerabilities, make Rust programs crash when compiled in debug mode. And finally, expected runtime errors such as IO-errors must be explicitly handled by the programmer or will lead to an immediate crash of the program, as opposed to undefined behavior in e.g. C and C++.
 
@@ -279,7 +279,7 @@ Besides the language features outlined above, the rust compiler has some smaller
 
 \subsubsection{rust-clippy} \label{clippy}
 
-Clippy \footnote{\url{https://github.com/Manishearth/rust-clippy}} is a compiler plugin that expands on the lints shipped with the Rust compiler and checks for common patterns that indicate inefficient, needlessly complex or unidiomatic Rust code. It is exceptionally easy to use since the complete procedure of setting it up consists of adding one line to the cargo configuration and main code file. Having done that, clippy will be run whenever any code in the project is compiled.\\
+Clippy\footnote{\url{https://github.com/Manishearth/rust-clippy}} is a compiler plugin that expands on the lints shipped with the Rust compiler and checks for common patterns that indicate inefficient, needlessly complex or unidiomatic Rust code. It is exceptionally easy to use since the complete procedure of setting it up consists of adding one line to the cargo configuration and main code file. Having done that, clippy will be run whenever any code in the project is compiled.\\
 \newpage
 Example of clippy output:
 {
@@ -313,7 +313,7 @@ Servo already has clippy integrated, it can be run through \texttt{./mach clippy
     \item Not a single reported lint indicated a possible bug.
 \end{itemize}
 
-While working through the warnings, we fixed about 130 of them and made a pull request to Servo \footnote{\url{https://github.com/servo/servo/pull/9123}} and reported several false positives on clippy \footnote{\url{https://github.com/Manishearth/rust-clippy/issues/528}} \footnote{\url{https://github.com/Manishearth/rust-clippy/issues/529}} \footnote{\url{https://github.com/Manishearth/rust-clippy/issues/532}}.
+While working through the warnings, we fixed about 130 of them and made a pull request to Servo\footnote{\url{https://github.com/servo/servo/pull/9123}} and reported several false positives on clippy(\footnote{\url{https://github.com/Manishearth/rust-clippy/issues/528}},\footnote{\url{https://github.com/Manishearth/rust-clippy/issues/529}},\footnote{\url{https://github.com/Manishearth/rust-clippy/issues/532}}).
 
 
 \subsubsection{Servo's Custom Lints}
