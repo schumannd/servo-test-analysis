@@ -32,7 +32,7 @@
 
 The current generation of web browsers (Internet Explorer, Chrome, Firefox, and Safari) are mostly built on old and large code bases, and important design decisions whose results are visible still today have been made in a time where the IT landscape looked vastly different in terms of hardware, end-user device form factors, and security.
 
-The servo project aims at building a new browser engine for today's requirements. It is designed to be highly parallel, leveraging multi-core hardware and saving power on mobile devices, and exceptionally secure, by using a new programming language that eliminates certain classes of security-relevant programming errors.
+The Servo project aims at building a new browser engine for today's requirements. It is designed to be highly parallel, leveraging multi-core hardware and saving power on mobile devices, and exceptionally secure, by using a new programming language that eliminates certain classes of security-relevant programming errors.
 
 The Servo project is developed and maintained by Mozilla Research in cooperation with Samsung. It is one of the largest projects being written in the Rust programming language, which is developed as well by Mozilla Research. We are learning Rust in our free time and wanted to test one of the major projects using it.
 
@@ -56,7 +56,7 @@ Servo is an open source project hosted on GitHub\footnote{\url{https://github.co
 
 Every Pull Request needs to pass the contribution checklist\footnote{\label{contributing}\url{https://github.com/servo/servo/blob/master/CONTRIBUTING.md}}. It covers technicalities such as: Every change needs to be accompanied by ``tests relevant to the fixed bug or new feature''\footnote{See last point at footnote \ref{contributing}.} which is to be evaluated by one of the reviewers from the core team, but it also includes the Rust Code of Conduct\footnote{\url{http://www.rust-lang.org/conduct.html}} to ensure a friendly and welcoming environment for all contributors.  \\
 
-Further documentation can be found in the servo wiki\footnote{\url{https://github.com/servo/servo/wiki}} hosted on Github. In addition to the above points it includes protocol notes on the biweekly meetings, long and short term goals, and a vast amount of documents aimed at helping with development and testing.
+Further documentation can be found in the Servo wiki\footnote{\url{https://github.com/servo/servo/wiki}} hosted on Github. In addition to the above points it includes protocol notes on the biweekly meetings, long and short term goals, and a vast amount of documents aimed at helping with development and testing.
 
 
 \subsection{Current Testing Status} \label{test_status}
@@ -78,13 +78,13 @@ Some other commands are still documented in the wiki and help pages but are now 
 As with most open source projects hosted on Github, the issue tracker\footnote{\url{https://github.com/features}} is used to track bugs, issues and features. It employs several handy features that make it easy to organize the frequent discussions and comments surrounding Issues and Pull Request. Both get assigned numbers, which when mentioned in any comment automatically link to the corresponding Issue or Pull Request. Issues automatically record when they were ``mentioned'' in another discussion. This builds a coherent map of Issues and their corresponding fixes (WIP or not).
 
 \paragraph{Mozilla's ``mach'' System}
-Mozilla's build system ``mach'' (from the german word ``machen'': to do) is at the core of the Servo project. Besides providing commands for running the various test suites as introduced earlier, it also makes it easy to compile and run the Servo binary or other related tools like rust-clippy (see chapter \ref{clippy}). While the Rust compiler brings its own package manager ``cargo'', which can also be used for compiling projects and running tests, it is not powerful enough (yet) to fulfill all the requirements a large project like servo has, and thus its commands were wrapped inside mach.
+Mozilla's build system ``mach'' (from the german word ``machen'': to do) is at the core of the Servo project. Besides providing commands for running the various test suites as introduced earlier, it also makes it easy to compile and run the Servo binary or other related tools like rust-clippy (see chapter \ref{clippy}). While the Rust compiler brings its own package manager ``cargo'', which can also be used for compiling projects and running tests, it is not powerful enough (yet) to fulfill all the requirements a large project like Servo has, and thus its commands were wrapped inside mach.
 
 
 \subsection{Servo's Roadmap}
-Short-term goals of the servo project are Windows support, finishing WebRender, a GPU-based rendering engine, and adding a GUI to servo, whose window currently consists solely of the rendered output without GUI controls.
+Short-term goals of the Servo project are Windows support, finishing WebRender, a GPU-based rendering engine, and adding a GUI to Servo, whose window currently consists solely of the rendered output without GUI controls.
  
-Being a research project, servo's long-term outcomes are rather open-ended, but preliminary performance testing shows major advantages over Gecko, the engine of Firefox, besides the security improvements that come naturally with choosing Rust and large architectural improvements made possible by the clean-slate approach. Replacing Gecko with servo in Mozilla's Firefox products appears like a reasonable goal, albeit the project is years away from implementing all of Gecko's functionality. As a compromise, Mozilla plans to use smaller, isolated modules written for Servo in Gecko, and will evaluate the feasibility of a standalone servo browser, most likely starting with the Android platform.
+Being a research project, Servo's long-term outcomes are rather open-ended, but preliminary performance testing shows major advantages over Gecko, the engine of Firefox, besides the security improvements that come naturally with choosing Rust and large architectural improvements made possible by the clean-slate approach. Replacing Gecko with Servo in Mozilla's Firefox products appears like a reasonable goal, albeit the project is years away from implementing all of Gecko's functionality. As a compromise, Mozilla plans to use smaller, isolated modules written for Servo in Gecko, and will evaluate the feasibility of a standalone Servo browser, most likely starting with the Android platform.
 
 
 
@@ -96,7 +96,7 @@ Being a research project, servo's long-term outcomes are rather open-ended, but 
 \todo{well...}
 
 \paragraph{When do verification and validation start? When are they complete?}
-V \& V starts with the begining of the project. As with many open source project that are developed by the community, the stakeholder or ``customer'' is the community itself. Which means that developer and customer are often the same person. In the case of servo the software is validated in bi-weekly meetings\footnote{\url{https://github.com/servo/servo/wiki/Meetings}} where both short-term next steps and long term milestones are discussed.\\
+V \& V starts with the begining of the project. As with many open source project that are developed by the community, the stakeholder or ``customer'' is the community itself. Which means that developer and customer are often the same person. In the case of Servo the software is validated in bi-weekly meetings\footnote{\url{https://github.com/servo/servo/wiki/Meetings}} where both short-term next steps and long term milestones are discussed.\\
   
   Verification is done through an extensive testing system. It is maintained by every developer as every code change needs to be accompanied by a test before it is merged into the code base. This test suite runs on every reviewed pull request, via two build servers (bors-servo\footnote{\url{https://github.com/bors-servo}} and buildbot\footnote{\url{http://servo-buildbot.pub.build.mozilla.org/}}). This ensures that no new bugs are introduced into the system.\\
   
@@ -106,10 +106,10 @@ V \& V will never be complete. Even after the release there will always be bog f
 Servo is already a well tested system. But it lacks a lot of even basic V \& V features like a report on any kind of test coverage. Furthermore we would like to see tests about parallel execution. These are hard to write and execute but a project having concurrency as one of it's main three points should test it.
 
 \paragraph{How can we assess the readiness of a product?} 
-The readiness of the product is currently assessed in biweekly meetings of the servo core team. There should be assessment by an outside party to prevent building unneccessary features and to keep a fresh new perspective regarding V \& V on the project.
+The readiness of the product is currently assessed in biweekly meetings of the Servo core team. There should be assessment by an outside party to prevent building unneccessary features and to keep a fresh new perspective regarding V \& V on the project.
 
 \paragraph{How can we control the quality of successive releases?}
-The Servo project already has the basic automated testing feature covered: Regression tests with the merge of every Pull Request. This assures, that no change makes the code base worse according to the test suite. Which in turn places the whole quality assurance on software tests. It is important, that these are as complete as possible. In addition to test that test parallel execution, performance tests should also be part of Servos test suite. Benchmarks of servo vs gecko were computed at some point\footnote{\url{https://www.phoronix.com/scan.php?page=news_item&px=MTgzNDA}}. But including them in the test suite would help to find less performant changes, that slow execution down from one release to another.
+The Servo project already has the basic automated testing feature covered: Regression tests with the merge of every Pull Request. This assures, that no change makes the code base worse according to the test suite. Which in turn places the whole quality assurance on software tests. It is important, that these are as complete as possible. In addition to test that test parallel execution, performance tests should also be part of Servos test suite. Benchmarks of Servo vs Gecko were computed at some point\footnote{\url{https://www.phoronix.com/scan.php?page=news_item&px=MTgzNDA}}. But including them in the test suite would help to find less performant changes, that slow execution down from one release to another.
 
 \paragraph{How can the development process itself be improved?}
 The development process used by Servo is very standard to many professional open source projects with not exorbitant budgets. When you don't have the resources to hire a separate testing team or a V \& V specialist the approach to have every developer test his own code and do full regression testing at every step is a successful model. It is hard to improve it without raising the budget. 
@@ -131,7 +131,7 @@ The biggest part of the test suite used in the Servo project is focused on valid
 These three forms of testing are all present but hardly differentiable in the Servo project. This is due to the fact that the core development team combines developers, release testers and users in the same team. The tests are mostly used during development for regression testing. But there is no separate test suite or separate test team used before releases. It is done by the community but mostly the core members as well. Finally the core developers are also the users, as they represent Mozilla. Ultimately Mozilla wants to replace the gecko\footnote{\url{https://developer.mozilla.org/en-US/docs/Mozilla/Gecko}} engine with Servo. Thus the core team develops, releases and decides when Servo is ready for the user: themselves. From a testers perspective this is not an optimal state to create a complete testing suite. A separate release testing team or at least an internal group posing as the "users" would be helpful to get an outside perspective on the readiness and validity of the product.
 
 \paragraph{Unit-, Integration- and System-testing}
-As can be seen in chapter \ref{test_status}, the unit tests only make up a fraction of the overall test suite. Integration tests are sometimes used in the dependencies, but do not get executed when testing the main Servo binary. The biggest part are the system tests. All WPT and CSS WG tests are system level tests as they execute the servo binary and try to actually use the whole rendering engine by rendering a complete web page, albeit testing only for small sets of features each. This testing approach that focuses mainly on system tests makes sense for testing a web engine, as there are a lot of formal requirements that can easily and exhaustively be tested on the whole product.
+As can be seen in chapter \ref{test_status}, the unit tests only make up a fraction of the overall test suite. Integration tests are sometimes used in the dependencies, but do not get executed when testing the main Servo binary. The biggest part are the system tests. All WPT and CSS WG tests are system level tests as they execute the Servo binary and try to actually use the whole rendering engine by rendering a complete web page, albeit testing only for small sets of features each. This testing approach that focuses mainly on system tests makes sense for testing a web engine, as there are a lot of formal requirements that can easily and exhaustively be tested on the whole product.
 
 
 \subsection{Consider available artefacts, discuss \& evaluate potentials w.r.t. coverage-based testing for your application}
@@ -185,7 +185,7 @@ Gcov\footnote{\url{https://gcc.gnu.org/onlinedocs/gcc/Gcov.html}} is a widely us
 \paragraph{kcov}
 The community suggested to try the tool kcov\footnote{\url{https://simonkagstrom.github.io/kcov/}}, which has been used successfully for smaller Rust projects. It works by inserting breakpoints into every line of code and checking them off when they are triggered. This increases execution time significantly but proves to be a robust way to generate code coverage, as it works on arbitrary binaries with debug symbols. Therefore, generating correct debug symbols is enough to let kcov produce a test coverage report. Unfortunately, it does not compile on Mac OS or Windows, so we had to run our tests in a linux (ubuntu) virtual machine which slows down execution even more. Another issue we faced was that the version provided by the package manager (apt-get) was out of date. Compiling kcov from source failed at first, but was quickly fixed by adding another dependency (libbfd-dev) to the build flags.\\
 
-Since servo relies on mach to prepare the running environment, we couldn't start kcov on the servo binary directly. Instead, our first coverage report was created by moving the servo binary to servo\_orig and placing the following script in its place:
+Since Servo relies on mach to prepare the running environment, we couldn't start kcov on the Servo binary directly. Instead, our first coverage report was created by moving the Servo binary to servo\_orig and placing the following script in its place:
 
 \begin{verbatim}
 
@@ -195,7 +195,7 @@ kcov --verify --exclude-pattern=/.cargo,../src /home/joda/servo/cov
 
 \end{verbatim}
 
-Now executing \textbf{./mach test} would run our script instead of the servo binary, which passes all parameters to the original servo binary but also executes kcov. In theory this should have yielded a complete test coverage report as kcov is also supposed to properly merge several executions of the same binary, which was a necessary feature since mach restarts servo for each of its tests. Unfortunately every test took 30-60 seconds which implied a whole week of running time to generate a complete coverage report. Also the merging of reports was not working correctly. But as the long execution time already disqualified kcov as a feasible coverage tool we did not continue working on fixing the merging problem.\\
+Now executing \textbf{./mach test} would run our script instead of the Servo binary, which passes all parameters to the original Servo binary but also executes kcov. In theory this should have yielded a complete test coverage report as kcov is also supposed to properly merge several executions of the same binary, which was a necessary feature since mach restarts Servo for each of its tests. Unfortunately every test took 30-60 seconds which implied a whole week of running time to generate a complete coverage report. Also the merging of reports was not working correctly. But as the long execution time already disqualified kcov as a feasible coverage tool we did not continue working on fixing the merging problem.\\
 
 Additionally, the partial coverage reports we got differed from test run to test run. Lines of code covered by one exemplary test ranged from 26976 to 27104 throughout several iterations. These fluctuations are probably caused by non-deterministic behaviour of Servo but could also be caused by inaccurate coverage reports on kcovs side. We can not be completely sure as it would have been infeasible to check the roughly 30,000 lines that were executed in one test run and trace the execution path.
 
@@ -214,7 +214,7 @@ afl.rs\footnote{\url{https://github.com/frewsxcv/afl.rs}}, based on American fuz
 
 Rust has an extensive set of static analysis techniques built-in. They became necessary to achieve the first design goal of the language, safety, while not impeding the second and third, speed and concurrency.
 
-For servo, these ASA techniques are a crucial part of its security concept. For instance, a large fraction of the security vulnerabilities in Gecko, the engine currently used in Firefox, are related to use-after-free bugs, which are completely eliminated by the Rust compiler.
+For Servo, these ASA techniques are a crucial part of its security concept. For instance, a large fraction of the security vulnerabilities in Gecko, the engine currently used in Firefox, are related to use-after-free bugs, which are completely eliminated by the Rust compiler.
 
 In the following we describe some of Rust's language concepts that let the Rust compiler prevent certain classes of programming errors that frequently occur in other languages. Finding such errors through static analysis is not always possible in other languages since they are not expressive enough and the programmer can't provide enough information in the code for an ASA tool to perform such an analysis.
 
@@ -292,7 +292,7 @@ Servo already has clippy integrated, it can be run through \texttt{./mach clippy
     \item Not a single reported lint indicated a possible bug.
 \end{itemize}
 
-While working through the warnings, we fixed about 130 of them and made a pull request to servo \footnote{\url{https://github.com/servo/servo/pull/9123}} and reported several false positives on clippy \footnote{\url{https://github.com/Manishearth/rust-clippy/issues/528}} \footnote{\url{https://github.com/Manishearth/rust-clippy/issues/529}} \footnote{\url{https://github.com/Manishearth/rust-clippy/issues/532}}.
+While working through the warnings, we fixed about 130 of them and made a pull request to Servo \footnote{\url{https://github.com/servo/servo/pull/9123}} and reported several false positives on clippy \footnote{\url{https://github.com/Manishearth/rust-clippy/issues/528}} \footnote{\url{https://github.com/Manishearth/rust-clippy/issues/529}} \footnote{\url{https://github.com/Manishearth/rust-clippy/issues/532}}.
 
 
 \todo{some conclusion on clippy}
@@ -304,7 +304,7 @@ While working through the warnings, we fixed about 130 of them and made a pull r
 
 \subsubsection{Servo's Custom Lints}
 
-Additional lints are relatively easy to add to the compilation process. While clippy makes use of this feature for generally applicable lints, servo itself adds a few lints that are specialized to servo's use case. For example, some objects in the servo codebase rely on being placed on the stack instead of the heap to provide certain safety guarantees. A compile-time lint prevents encapsulating these objects in containers that would place them on the heap. Furthermore, objects that have representations in JavaScript-controlled memory are statically checked for being either a root registered with the JavaScript garbage collector or contained within such a root.
+Additional lints are relatively easy to add to the compilation process. While clippy makes use of this feature for generally applicable lints, Servo itself adds a few lints that are specialized to Servo's use case. For example, some objects in the Servo codebase rely on being placed on the stack instead of the heap to provide certain safety guarantees. A compile-time lint prevents encapsulating these objects in containers that would place them on the heap. Furthermore, objects that have representations in JavaScript-controlled memory are statically checked for being either a root registered with the JavaScript garbage collector or contained within such a root.
 
 
 \subsection{rust-fmt}
