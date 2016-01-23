@@ -22,7 +22,7 @@
 \begin{document}
 
 
-\title{Servo}
+\title{Testing Servo, the Parallel Browser Engine Project}
 \author{\\ Johannes Linke, David Schumann\\ Hasso Plattner Institute, University of Potsdam, Germany\\ \\ \\
 Lecture ``Software Testing, Verification and Analysis''\\ Winter Term 2015/2016\\ Supervision: Dr. Leen Lambers \vspace{320px}}
 
@@ -51,7 +51,7 @@ The authors of this report are learning Rust in their free time and wanted to te
 \newpage
 
 
-\section{Application Survey}
+\section{Current State of the Servo Project}
 
 In this section, we'll shortly discuss the choice of programming language for Servo, the \todo{that headline}, the testing and build infrastructure, and Servo's roadmap.
 
@@ -61,8 +61,7 @@ In this section, we'll shortly discuss the choice of programming language for Se
 While some dependencies and build infrastructure code are written in other languages, the main programming language remains Rust. This works well with the main focus of Servo: a highly parallel, safe and fast alternative to current engines. Rust was designed to be just that: For instance, it is memory safe by design and requires the programmer to be very explicit with typing and error handling. This helps catching most errors at compilation time using static analysis. More details about such features of the Rust language are explained in section \ref{rust_features}.
 
 
-\subsection{Requirements, Specifications and Documentation}
-\todo{this headline?}
+\subsection{The Contribution Workflow}
 
 Servo is an open source project hosted on GitHub\footnote{\url{https://github.com/servo/servo}}. As it is common among open source projects, the core developers have established a well documented GitHub workflow\footnote{\url{https://github.com/servo/servo/wiki/Github-workflow}}. It consists of the standard steps that go with any GitHub project where you don't have write access:
 \begin{enumerate}
@@ -73,9 +72,11 @@ Servo is an open source project hosted on GitHub\footnote{\url{https://github.co
     \item The reviewer states his approval, triggers the build bot to run automated tests and merges the pull request
 \end{enumerate}
 
-Every pull request needs to pass the contribution checklist\footnote{\label{contributing}\url{https://github.com/servo/servo/blob/master/CONTRIBUTING.md}}. It covers technicalities such as: Every change needs to be accompanied by ``tests relevant to the fixed bug or new feature''\footnote{See last point at footnote \ref{contributing}.},  which is to be evaluated by one of the reviewers from the core team, but it also includes the Rust Code of Conduct\footnote{\url{http://www.rust-lang.org/conduct.html}} to ensure a friendly and welcoming environment for all contributors.  \\
+Every pull request needs to pass the contribution checklist\footnote{\label{contributing}\url{https://github.com/servo/servo/blob/master/CONTRIBUTING.md}}. It covers technicalities such as: Every change needs to be accompanied by ``tests relevant to the fixed bug or new feature''\footnote{See last point 	 footnote \ref{contributing}.},  which is to be evaluated by one of the reviewers from the core team, but it also includes the Rust Code of Conduct\footnote{\url{http://www.rust-lang.org/conduct.html}} to ensure a friendly and welcoming environment for all contributors.  \\
+  
+Verification is done through an extensive testing system. It is maintained by every developer as every code change needs to be accompanied by tests. This test suite runs on every reviewed pull request, via two build servers (bors-servo\footnote{\url{https://github.com/bors-servo}} and buildbot\footnote{\url{http://servo-buildbot.pub.build.mozilla.org/}}). This ensures that no new bugs are introduced into the system.\\
 
-Further documentation can be found in the Servo wiki\footnote{\url{https://github.com/servo/servo/wiki}} hosted on GitHub. In addition to the above points it includes protocol notes on the biweekly meetings, long and short term goals, and a vast amount of documents aimed at helping with development and testing.
+Further documentation can be found in the Servo wiki\footnote{\url{https://github.com/servo/servo/wiki}} hosted on GitHub. In addition to the above points it includes protocol notes on the biweekly meetings, long and short term goals, and a vast amount of documents aimed at helping with development and testing.\\
 
 \paragraph{Tracking and Fixing of Issues}
 As with most open source projects hosted on GitHub, the issue tracker\footnote{\url{https://github.com/features}} is used to track bugs, issues and features. It employs several handy features that make it easy to organize the frequent discussions and comments surrounding issues and pull request. Both get assigned numbers, which when mentioned in any comment automatically link to the corresponding issue or pull request. Issues automatically record when they were ``mentioned'' in another discussion. This builds a coherent map of issues and their corresponding fixes.
@@ -107,33 +108,29 @@ Short-term goals of the Servo project are Windows support, finishing WebRender, 
  
 Being a research project, Servo's long-term outcomes are rather open-ended, but preliminary performance testing shows major advantages over Gecko, the engine of Firefox, besides the security improvements that come naturally with choosing Rust and large architectural improvements made possible by the clean-slate approach. Replacing Gecko with Servo in Mozilla's Firefox products appears like a reasonable goal, albeit the project is years away from implementing all of Gecko's functionality. As a compromise, Mozilla plans to use smaller, isolated modules written for Servo in Gecko, and will evaluate the feasibility of a standalone Servo browser, most likely starting with the Android platform\footnote{\url{https://github.com/servo/servo/wiki/Roadmap}}.
 
-
 \newpage
 
 
-\section{Initial Test Plan}
+\section{Verification and Validation (V\&V)}
 
-\todo{this headline}
+Tests must be written for every functionality altering change made to the Servo Code base. While this is enforced quite rigorously, other aspects of V\&V are not as ingrained into the Servo work flow.
 
 
 \subsection{The five V\&V questions}
-\todo{well...}
 
 \paragraph{When do verification and validation start? When are they complete?}
 V \& V starts with the begining of the project. As with many open source project that are developed by the community, the stakeholder or ``customer'' is the community itself. Which means that developer and customer are often the same person. In the case of Servo the software is validated in bi-weekly meetings\footnote{\url{https://github.com/servo/servo/wiki/Meetings}} where both short-term next steps and long term milestones are discussed.\\
   
-  Verification is done through an extensive testing system. It is maintained by every developer as every code change needs to be accompanied by a test before it is merged into the code base. This test suite runs on every reviewed pull request, via two build servers (bors-servo\footnote{\url{https://github.com/bors-servo}} and buildbot\footnote{\url{http://servo-buildbot.pub.build.mozilla.org/}}). This ensures that no new bugs are introduced into the system.\\
-  
-V \& V will never be complete. Even after the release there will always be bog fixes or new features that need to be tested as well. One could argue that V \& V ends when the project gets abandoned but you can hardly call that a complete state.
+V \& V will never be complete. Even after the release there will always be bug fixes or new features that need to be tested as well. One could argue that V \& V ends when the project gets abandoned but you can hardly call that a complete state.
 
 \paragraph{What particular techniques should be applied during development?}
-Servo is already a well tested system. But it lacks a lot of even basic V \& V features like a report on any kind of test coverage. Furthermore we would like to see tests about parallel execution. These are hard to write and execute but a project having concurrency as one of it's main three points should test it.
+Servo is already a well tested system. But it lacks a lot of even basic V \& V features like a report on any kind of test coverage. Until now every pull Request is supposedly tested fully by a test accompanying it. But an automatic check in the form of statement coverage would help to find edge cases that might have slipped through the review. Furthermore tests about parallel execution would be an important addition to the Servo test suite. These are hard to write and execute but a project having concurrency as one of it's main goals should test it.
 
-\paragraph{How can we assess the readiness of a product?} 
-The readiness of the product is currently assessed in biweekly meetings of the Servo core team. There should be assessment by an outside party to prevent building unneccessary features and to keep a fresh new perspective regarding V \& V on the project.
+\paragraph{How can we assess the readiness of a product?} research project, long term goal
+As a research project it is hard to assess it's completeness. The overarching long term goal of Servo is to replace the current web engine Gecko of the Mozilla Firefox Browser. But this is estimated to take at least several more years. The progress of Servo is currently assessed in biweekly meetings of the Servo core team. The mile stones and road map that results from these meetings are a good way to keep track of short- and long term goals. It would help to have an assessment by an outside, non-developer party to prevent building unnecessary features and to keep a fresh new perspective regarding V \& V on the project.
 
 \paragraph{How can we control the quality of successive releases?}
-The Servo project already has the basic automated testing feature covered: Regression tests with the merge of every pull request. This assures, that no change makes the code base worse according to the test suite. Which in turn places the whole quality assurance on software tests. It is important, that these are as complete as possible. In addition to test that test parallel execution, performance tests should also be part of Servos test suite. Benchmarks of Servo vs Gecko were computed at some point\footnote{\url{https://www.phoronix.com/scan.php?page=news_item&px=MTgzNDA}}. But including them in the test suite would help to find less performant changes, that slow execution down from one release to another.
+The Servo project already has the basic automated testing feature covered: Regression tests with the merge of every pull request. This assures, that no change makes the code base worse according to the test suite. Which in turn places the whole quality assurance on software tests. It is important, that these are as complete as possible. In addition to test that test parallel execution, performance tests could also be part of Servos test suite. Benchmarks of Servo vs Gecko were computed at some point\footnote{\url{https://www.phoronix.com/scan.php?page=news_item&px=MTgzNDA}}. But including them in the test suite would help to find less performant changes, that slow down execution from one release to another.
 
 \paragraph{How can the development process itself be improved?}
 The development process used by Servo is very standard to many professional open source projects with not exorbitant budgets. When you don't have the resources to hire a separate testing team or a V \& V specialist the approach to have every developer test his own code and do full regression testing at every step is a successful model. It is hard to improve it without raising the budget. 
@@ -154,21 +151,13 @@ The biggest part of the test suite used in the Servo project is focused on valid
 These three forms of testing are all present but hardly differentiable in the Servo project. This is due to the fact that the core development team combines developers, release testers and, in a certain way, users in the same team. The tests are mostly used during development for regression testing, but there is currently no separate test suite or separate test team intended for release testing. It is done by the community but mostly the core members as well. Finally the core developers could also be seen as the users, as Servo is no standalone software intended for end users, but instead more a library meant to be integrated into a GUI application like Mozilla's Firefox. Thus the core team develops, releases and decides when Servo is ready for the user: themselves. Being a library intended for internal development teams makes testing easier, since most requirements in terms of standards conformance and the exposed API can be tested rather easily. On the other hand, the team might be missing an outside perspective on the readiness and validity of the product.
 
 \paragraph{Unit-, Integration- and System-testing}
-As can be seen in chapter \ref{test_status}, the unit tests only make up a fraction of the overall test suite. Integration tests are sometimes used in the dependencies, but do not get executed when testing the main Servo binary. The biggest part are the system tests. All WPT and CSS WG tests are system level tests as they execute the Servo binary and use the whole rendering engine by rendering a complete web page, albeit testing only for small sets of features each. This testing approach that focuses mainly on system tests makes sense for testing a web engine, as there are a lot of formal requirements that can easily and exhaustively be tested on the whole product. \todo{that last sentence doesn't make too much sense}
-
-
-\subsection{Consider available artifacts, discuss \& evaluate potentials w.r.t. coverage-based testing for your application}
-\todo{do}
-
-
-\subsection{Develop \& document initial test plan based on your findings}
-\todo{do}
+As can be seen in chapter \ref{test_status}, the unit tests only make up a fraction of the overall test suite. Integration tests are sometimes used in the dependencies, but do not get executed when testing the main Servo binary. The biggest part are the system tests. All WPT and CSS WG tests are system level tests as they execute the Servo binary and use the whole rendering engine by rendering a complete web page, albeit testing only for small sets of features each. While the overall testing approach is in no way complete, it forms a practical V\&V
 
 
 \newpage
 
 
-\section{Test automation}
+\section{Test Automation}
 
 This section introduces several tools that run tests on software written in Rust and collect coverage.
 
