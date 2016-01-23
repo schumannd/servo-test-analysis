@@ -43,6 +43,7 @@ While some dependencies and build infrastructure code are written in different l
 
 
 \subsection{Requirements, Specifications and Documentation}
+\todo{this headline?}
 
 Servo is an open source project hosted on GitHub\footnote{\url{https://github.com/servo/servo}}. As with most open source projects, the core developers have established a well documented GitHub workflow\footnote{\url{https://github.com/servo/servo/wiki/Github-workflow}}. It consists of the standard steps that go with any Github project where you don't have write access:
 \begin{enumerate}
@@ -79,8 +80,11 @@ As with most open source projects hosted on Github, the issue tracker\footnote{\
 \paragraph{Mozilla's ``mach'' System}
 Mozilla's build system ``mach'' (from the german word ``machen'': to do) is at the core of the Servo project. Besides providing commands for running the various test suites as introduced earlier, it also makes it easy to compile and run the Servo binary or other related tools like rust-clippy (see chapter \ref{clippy}). While the Rust compiler brings its own package manager ``cargo'', which can also be used for compiling projects and running tests, it is not powerful enough (yet) to fulfill all the requirements a large project like servo has, and thus its commands were wrapped inside mach.
 
-\todo{this sentence}
-- Servo is scheduled in Q4 2015 for alpha release ``that just works'' (mobile, but also other platforms)\footnote{\url{https://github.com/servo/servo/wiki/Roadmap}}
+
+\subsection{Servo's Roadmap}
+Short-term goals of the servo project are Windows support, finishing WebRender, a GPU-based rendering engine, and adding a GUI to servo, whose window currently consists solely of the rendered output without GUI controls.
+ 
+Being a research project, servo's long-term outcomes are rather open-ended, but preliminary performance testing shows major advantages over Gecko, the engine of Firefox, besides the security improvements that come naturally with choosing Rust and large architectural improvements made possible by the clean-slate approach. Replacing Gecko with servo in Mozilla's Firefox products appears like a reasonable goal, albeit the project is years away from implementing all of Gecko's functionality. As a compromise, Mozilla plans to use smaller, isolated modules written for Servo in Gecko, and will evaluate the feasibility of a standalone servo browser, most likely starting with the Android platform.
 
 
 
@@ -168,12 +172,10 @@ Any crashes inside the tests (e.g. by failing assertions) are interpreted as tes
 
 Cargo's builtin testing features are not meant for large-scale applications and test suites. There are some smaller libraries like stainless \footnote{\url{https://github.com/reem/stainless}} that are extending on cargo's features for example by adding setup and teardown methods, but such libraries haven't seen much use yet. 
 
-Servo uses \texttt{cargo test} for running the unit tests. For running the more complex test suites, it builds the binaries with cargo but uses python scripts to execute the individual tests.
-
-\todo{expand on mach how it works, the different test suites}
+Servo uses \texttt{cargo test} for running the unit tests. For running the more complex test suites, it builds the binaries with cargo but uses python scripts to execute the individual tests. See chapter \ref{test_status} for more details.
 
 
-\subsection{Coverage tools using gcov and kcov}
+\subsection{Coverage Tools Using gcov and kcov}
 
 No type of coverage has ever been calculated for the whole Servo project, not even basic statement coverage. As this is one of the most common ways to indicate the completeness of the test suite we looked into creating a test coverage of Servo. We also hoped to find parts in the code base that are not yet covered by tests which we could then further examine. 
 
@@ -198,7 +200,7 @@ Now executing \textbf{./mach test} would run our script instead of the servo bin
 Additionally, the partial coverage reports we got differed from test run to test run. Lines of code covered by one exemplary test ranged from 26976 to 27104 throughout several iterations. These fluctuations are probably caused by non-deterministic behaviour of Servo but could also be caused by inaccurate coverage reports on kcovs side. We can not be completely sure as it would have been infeasible to check the roughly 30,000 lines that were executed in one test run and trace the execution path.
 
 
-\subsection{Fuzzy Testing using afl.rs}
+\subsection{Fuzzy Testing Using afl.rs}
 
 afl.rs\footnote{\url{https://github.com/frewsxcv/afl.rs}}, based on American fuzzy lop\footnote{\url{http://lcamtuf.coredump.cx/afl/}}, is a package that allows finding bugs in Rust code through fuzzy testing. It works by taking exemplary input over stdin and mutating it. As a consequence, it requires that the binary to test reads its input over stdin. As Servo does not do this, we looked at Servos html-parser html5ever\footnote{\url{https://github.com/servo/html5ever}} instead. Here we built a test binary that would read html code over stdin and try to parse it. During the setup we realized that afl.rs currently requires quite an old version of Rust (1.2) due to a bug in newer Rust versions\footnote{\url{https://github.com/frewsxcv/afl.rs/issues/11}}. html5ever, however, required Rust 1.4 to work. This problem deemed fuzzy testing the html5ever component or Servo as a whole impossible without extensive debugging of the Rust compiler.
 
@@ -208,7 +210,7 @@ afl.rs\footnote{\url{https://github.com/frewsxcv/afl.rs}}, based on American fuz
 \section{ASA}
 
 
-\subsection{ASA features of the Rust language} \label{rust_features}
+\subsection{ASA Features of the Rust Language} \label{rust_features}
 
 Rust has an extensive set of static analysis techniques built-in. They became necessary to achieve the first design goal of the language, safety, while not impeding the second and third, speed and concurrency.
 
@@ -247,7 +249,7 @@ In Rust, however, these usage examples are executed and tested as part of \textt
 
 \subsection{Lints}
 
-\subsubsection{Lints reported by the Rust compiler}
+\subsubsection{Lints Reported by the Rust Compiler}
 
 Besides the language features outlined above, the rust compiler has some smaller ASA capabilities in the form of lints which are reported as warnings during compilation. They include unused imports and variables, unnecessarily mutable variables, dead code, variable and function names not following the naming conventions, and unconditional recursions. There are some more lints that are disabled by default like missing documentation of public interfaces and the usage of the \texttt{unsafe} keyword.
 
@@ -300,7 +302,7 @@ While working through the warnings, we fixed about 130 of them and made a pull r
 \todo{How good is ASA in detecting faults in your project?}
 
 
-\subsubsection{Servo's custom lints}
+\subsubsection{Servo's Custom Lints}
 
 Additional lints are relatively easy to add to the compilation process. While clippy makes use of this feature for generally applicable lints, servo itself adds a few lints that are specialized to servo's use case. For example, some objects in the servo codebase rely on being placed on the stack instead of the heap to provide certain safety guarantees. A compile-time lint prevents encapsulating these objects in containers that would place them on the heap. Furthermore, objects that have representations in JavaScript-controlled memory are statically checked for being either a root registered with the JavaScript garbage collector or contained within such a root.
 
