@@ -28,14 +28,18 @@
 \maketitle
 
 
-\section{About the Project (Application Survey)}
+\section{About the Project}
 
-The Servo project is developed and maintained by Mozilla Research in cooperation with Samsung. Servo is an experimental web browser layout engine that tries to create a highly parallel environment where many components (like HTML parsing, image decoding, rendering, etc.) are handled by isolated tasks. At the same time it is one of the biggest projects being developed in the Rust programming language, which is developed as well by Mozilla Research. We are learning Rust in our free time and wanted to test one of the major projects using it.
+The current generation of web browsers (Internet Explorer, Chrome, Firefox, and Safari) are mostly built on old and large code bases, and important design decisions whose results are visible still today have been made in a time where the IT landscape looked vastly different in terms of hardware, end-user device form factors, and security.
+
+The servo project aims at building a new browser engine for today's requirements. It is designed to be highly parallel, leveraging multi-core hardware and saving power on mobile devices, and exceptionally secure, by using a new programming language that eliminates certain classes of security-relevant programming errors.
+
+The Servo project is developed and maintained by Mozilla Research in cooperation with Samsung. It is one of the largest projects being written in the Rust programming language, which is developed as well by Mozilla Research. We are learning Rust in our free time and wanted to test one of the major projects using it.
 
 
 \subsection{Main Programming Language: Rust}
 
-While some dependencies and build infrastructure code is written in different languages, the main programming language remains Rust. This works well with the main focus of Servo: a highly parallel, safe and fast alternative to current engines. Rust was designed to be just that: For instance, it is memory safe by design and requires the programmer to be very explicit with typing and error handling. This helps catching most errors at compilation time using static analysis. More details about the features of the Rust language are explained in section \ref{rust_features}.
+While some dependencies and build infrastructure code are written in different languages, the main programming language remains Rust. This works well with the main focus of Servo: a highly parallel, safe and fast alternative to current engines. Rust was designed to be just that: For instance, it is memory safe by design and requires the programmer to be very explicit with typing and error handling. This helps catching most errors at compilation time using static analysis. More details about the features of the Rust language are explained in section \ref{rust_features}.
 
 
 \subsection{Requirements, Specifications and Documentation}
@@ -75,7 +79,7 @@ As with most open source projects hosted on Github, the issue tracker\footnote{\
 \paragraph{Mozilla's ``mach'' System}
 Mozilla's build system ``mach'' (from the german word ``machen'': to do) is at the core of the Servo project. Besides providing commands for running the various test suites as introduced earlier, it also makes it easy to compile and run the Servo binary or other related tools like rust-clippy (see chapter \ref{clippy}). While the Rust compiler brings its own package manager ``cargo'', which can also be used for compiling projects and running tests, it is not powerful enough (yet) to fulfill all the requirements a large project like servo has, and thus its commands were wrapped inside mach.
 
-
+\todo{this sentence}
 - Servo is scheduled in Q4 2015 for alpha release ``that just works'' (mobile, but also other platforms)\footnote{\url{https://github.com/servo/servo/wiki/Roadmap}}
 
 
@@ -208,13 +212,15 @@ afl.rs\footnote{\url{https://github.com/frewsxcv/afl.rs}}, based on American fuz
 
 Rust has an extensive set of static analysis techniques built-in. They became necessary to achieve the first design goal of the language, safety, while not impeding the second and third, speed and concurrency.
 
-What follows is a list of classes of errors that are prevented by the Rust compiler. Most of them are allowed in other languages and become sources of programming errors. Finding such errors through static analysis is not always possible in other languages since they are not expressive enough and the programmer can't provide enough information in the code for an ASA tool to perform such an analysis.
+For servo, these ASA techniques are a crucial part of its security concept. For instance, a large fraction of the security vulnerabilities in Gecko, the engine currently used in Firefox, are related to use-after-free bugs, which are completely eliminated by the Rust compiler.
 
-\paragraph{Ownership.} In Rust, variables and objects are always "`owned"' by a scope (usually, a block of code delimited by curly braces) or another object. This ownership can be moved, for example by calling a method and handing over the object as a parameter, but the language provides no way to copy the ownership to an object. This way, the owner of an object can be statically determined, and, more importantly, each object can be deleted if its owning object is deleted or the owning scope ends. This way, it can be determined at compile-time when each object has to be deleted, completely eliminating use-after-free bugs, a common source for crashes and security vulnerabilities, and preventing most classes of memory leaks.
+In the following we describe some of Rust's language concepts that let the Rust compiler prevent certain classes of programming errors that frequently occur in other languages. Finding such errors through static analysis is not always possible in other languages since they are not expressive enough and the programmer can't provide enough information in the code for an ASA tool to perform such an analysis.
+
+\paragraph{Ownership.} In Rust, variables and objects are always ``owned'' by a scope (usually, a block of code delimited by curly braces) or another object. This ownership can be moved, for example by calling a method and handing over the object as a parameter, but the language provides no way to copy the ownership to an object. This way, the owner of an object can be statically determined, and, more importantly, each object can be deleted if its owning object is deleted or the owning scope ends. This way, it can be determined at compile-time when each object has to be deleted, completely eliminating use-after-free bugs, a common source for crashes and security vulnerabilities, and preventing most classes of memory leaks.
 
 \paragraph{Borrowing.} To allow for more flexible movement of data, objects can be temporarily borrowed into other scopes. The compiler statically ensures that there exists either exactly one mutable borrow, through which the object can be mutated, or any number of immutable borrows. By preventing shared mutable state, a lot of programming errors are made impossible, for example data races. A data race occurs if two threads access the same data in an unsynchronized fashion and at least one of them writes. Since there can be only one thread writing at one specific data point at the same time, data races cannot happen. Iterator invalidation is another problem detected at compile time: Since iterating over a container mutably borrows the container, modifying the container, which would need to happen through a second mutable borrow, is not possible.
 
-\paragraph{Safe memory accesses.} Likewise it is not possible to access uninitialized memory and, since pointers are not part of the language, null pointers do not exist as well.
+\paragraph{Safe memory accesses.} Likewise it is not possible to access uninitialized memory and, since pointers are not part of the language, null pointers do not exist as well. Not an ASA technique but related to memory safety are the run-time bounds checks that are mandatory for all Rust data containers.
 
 \paragraph{Code-generating macros.} Rust features a powerful macro syntax. Unlike in C and C++, where macros simply perform text replacements, macros in Rust are hygienic, can generate different code depending on the type of input and take a variable number of parameters among other advantages. In fact, a library has been written that expands regular expressions to native Rust code, enabling a lot of optimization potential as well as compile-time syntax checking on the expression \footnote{\url{https://github.com/rust-lang-nursery/regex}}. Another library enables specifying parsers through a macro-based API \footnote{\url{https://github.com/Geal/nom}}. The resulting parsers are extremely fast and guaranteed to be safe.
 
@@ -236,7 +242,7 @@ What follows is a list of classes of errors that are prevented by the Rust compi
 
 In Rust, however, these usage examples are executed and tested as part of \texttt{cargo test}. To simplify this process, the example code is automatically completed e.g. with a main function to make it a valid Rust program. More complex examples can be built, e.g. spanning multiple functions, and individual lines can be hidden to focus the user-visible documentation on the relevant parts. The full set of testing facilities, e.g. assertions, is available, making it possible to avoid outdated code examples altogether.
 
-\paragraph{Other features.} There are several smaller features, restrictions and well-chosen defaults of the Rust language that improve the robustness of programs: For example, variables are immutable by default, encouraging a less error-prone programming style. Matches (the Rust-equivalent of switch-case statements) must be exhaustive, that is each possible value of the variable that is matched must be handled by a branch, making it impossible for the programmer to forget a case. And finally, runtime errors such as IO-errors must be explicitly handled by the programmer or will lead to an immediate crash of the program, as opposed to undefined behavior in e.g. C and C++.
+\paragraph{Other features.} There are several smaller features, restrictions and well-chosen defaults of the Rust language that improve the robustness of programs, some of them being ASA techniques: For example, variables are immutable by default, encouraging a less error-prone programming style. Matches (the Rust-equivalent of switch-case statements) must be exhaustive, that is each possible value of the variable that is matched must be handled by a branch, making it impossible for the programmer to forget a case. Integer overflows, being another source of programming errors and security vulnerabilities, make Rust programs crash when compiled in debug mode. And finally, runtime errors such as IO-errors must be explicitly handled by the programmer or will lead to an immediate crash of the program, as opposed to undefined behavior in e.g. C and C++.
 
 
 \subsection{Lints}
@@ -301,7 +307,7 @@ Additional lints are relatively easy to add to the compilation process. While cl
 
 \subsection{rust-fmt}
 
-Although not strictly being an ASA tool, rust-fmt \footnote{\url{https://github.com/rust-lang-nursery/rustfmt}} should not go unmentioned. Rust-fmt formats rust code according to the Rust style guide \footnote{\url{https://github.com/rust-lang/rust/tree/master/src/doc/style}} and an extensive set of customization parameters. With an ecosystem this young, rust-fmt and the style guide itself are still in a very early stage of development.
+Although not strictly being an ASA tool, rust-fmt\footnote{\url{https://github.com/rust-lang-nursery/rustfmt}} should not go unmentioned. Rust-fmt formats rust code according to the Rust style guide\footnote{\url{https://github.com/rust-lang/rust/tree/master/src/doc/style}} and an extensive set of customization parameters. With an ecosystem this young, rust-fmt and the style guide itself are still in a very early stage of development.
 
 
 \end{document}
